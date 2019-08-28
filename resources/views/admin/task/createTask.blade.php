@@ -64,20 +64,20 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="title" class="col-md-2 control-label">Time</label>
+                            <label for="start" class="col-md-2 control-label">Start Time</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="title"
-                                    type="text" id="title" />
+                                <input class="form-control" required="required" autofocus="autofocus" name="start"
+                                    type="text" id="start" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="title" class="col-md-2 control-label">Date</label>
+                            <label for="end" class="col-md-2 control-label">End Time</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="title"
-                                    type="text" id="title" />
+                                <input class="form-control" required="required" autofocus="autofocus" name="end"
+                                    type="text" id="end" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>

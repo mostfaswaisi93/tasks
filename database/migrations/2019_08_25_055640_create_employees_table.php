@@ -22,7 +22,6 @@ class CreateEmployeesTable extends Migration
             $table->integer('department_id');
             $table->integer('job_id');
             $table->integer('user_id');
-            $table->boolean('active');
             $table->timestamps();
         });
     }

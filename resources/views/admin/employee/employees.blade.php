@@ -4,7 +4,6 @@
 
 <div class="container">
     <div class="row">
-
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -24,7 +23,6 @@
                                 <th>Department</th>
                                 <th>Job Title</th>
                                 <th>Skills - Tags</th>
-                                <th>isManger</th>
                                 <th>Active</th>
                                 <th>Action</th>
                             </tr>
@@ -45,7 +43,6 @@
                                     @endforeach
                                 </td>
                                 <td>No</td>
-                                <td>No</td>
                                 <td>
                                     <a href="/admin/employees/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/employees/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
@@ -65,7 +62,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

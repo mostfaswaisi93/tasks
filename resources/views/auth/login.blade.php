@@ -39,9 +39,9 @@
                                 <button type="submit" class="btn btn-primary">
                                     Login
                                 </button>
-                                <a class="btn btn-link" href="/password/reset">
+                                {{-- <a class="btn btn-link" href="/password/reset">
                                     Forgot Your Password?
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </form>

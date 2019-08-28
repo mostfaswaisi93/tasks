@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Employee;
 use App\Project;
 use App\Task;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -55,7 +56,7 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->employee_id = $request->employee_id;
         $task->project_id = $request->project_id;
-        $task->time = $request->time;
+        $task->start = Carbon::now($request->time);
         $task->date = $request->date;
         $task->notes = $request->notes;
         $task->active = true;

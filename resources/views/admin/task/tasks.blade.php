@@ -35,8 +35,8 @@
                                 <td>{{$item->description}}</td>
                                 <td>{{$item->employee->full_name}}</td>
                                 <td>{{$item->project->title}}</td>
-                                <td>{{$item->time}}</td>
-                                <td>{{$item->date}}</td>
+                                <td>{{$item->start}}</td>
+                                <td>{{$item->end}}</td>
                                 <td>{{$item->notes}}</td>
                                 <td>No</td>
                                 <td>
