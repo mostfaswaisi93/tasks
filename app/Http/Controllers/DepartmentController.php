@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,6 +39,11 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required'
+        ]);
+
         $department = new Department();
         $department->name = $request->name;
         $department->description = $request->description;
@@ -74,6 +83,11 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, Department $department)
     {
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required'
+        ]);
+
         $department->name = $request->name;
         $department->description = $request->description;
         $department->save();

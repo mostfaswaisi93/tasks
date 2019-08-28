@@ -8,7 +8,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2>
-                        Tags
+                        Skills - Tags
                         <a href="/admin/tags/create" class="btn btn-default pull-right">Add New</a>
                     </h2>
                 </div>
@@ -25,7 +25,6 @@
                             <tr>
                                 <td>{{$item->name}}</td>
                                 <td>
-                                    <a href="/admin/tags/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/tags/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
                                     <form action="/admin/tags/{{$item->id}}" method="post"
                                         style="display: inline;">

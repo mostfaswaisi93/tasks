@@ -21,7 +21,7 @@ class CreateEmployeesTable extends Migration
             $table->string('address');
             $table->integer('department_id');
             $table->integer('job_id');
-            $table->boolean('isManger');
+            $table->integer('user_id');
             $table->boolean('active');
             $table->timestamps();
         });

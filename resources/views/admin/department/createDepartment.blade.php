@@ -13,14 +13,14 @@
                     </h2>
                 </div>
                 <div class="panel-body">
+                    @include('admin._errors')
                     <form method="POST" action="/admin/departments" accept-charset="UTF-8" class="form-horizontal"
                         role="form">
                         @csrf
                         <div class="form-group">
                             <label for="name" class="col-md-2 control-label">Department Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="name"
-                                    type="text" id="name" />
+                                <input class="form-control" autofocus="autofocus" name="name" type="text" id="name" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -29,8 +29,8 @@
                         <div class="form-group">
                             <label for="description" class="col-md-2 control-label">Department Description</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" required="required" name="description" cols="50"
-                                    rows="10" id="description"></textarea>
+                                <textarea class="form-control" name="description" cols="50" rows="10"
+                                    id="description"></textarea>
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>

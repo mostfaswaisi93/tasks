@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -36,6 +40,11 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
         $project = new Project();
         $project->title = $request->title;
         $project->description = $request->description;
@@ -77,6 +86,11 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
         $project->title = $request->title;
         $project->description = $request->description;
         $project->department_id = $request->department_id;

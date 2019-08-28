@@ -37,7 +37,7 @@
                     <li><a href="/admin/departments">Departments</a></li>
                     <li><a href="/admin/tasks">Tasks</a></li>
                     <li><a href="/admin/projects">Projects</a></li>
-                    <li><a href="/admin/tags">Tags</a></li>
+                    <li><a href="/admin/tags">Skills - Tags</a></li>
                     <li><a href="/admin/jobs">Jobs</a></li>
                 </ul>
                 <!-- Right Side Of Navbar -->

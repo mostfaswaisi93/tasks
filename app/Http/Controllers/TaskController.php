@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Employee;
+use App\Project;
 use App\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +20,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.task.tasks')->with('tasks', Task::paginate(3));
     }
 
     /**
@@ -24,7 +30,10 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.task.createTask')
+            ->with('tasks', Task::get())
+            ->with('employees', Employee::get(['id', 'full_name']))
+            ->with('projects', Project::get(['id', 'title']));
     }
 
     /**
@@ -35,7 +44,24 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
+        $task = new Task();
+
+        $task->title = $request->title;
+        $task->description = $request->description;
+        $task->employee_id = $request->employee_id;
+        $task->project_id = $request->project_id;
+        $task->time = $request->time;
+        $task->date = $request->date;
+        $task->notes = $request->notes;
+        $task->active = true;
+        $task->save();
+
+        return redirect('admin/tasks');
     }
 
     /**
@@ -46,7 +72,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return view('admin.task.showTask')->with('task', $task);
     }
 
     /**
@@ -57,7 +83,10 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        return view('admin.task.editTask')
+            ->with('task', $task)
+            ->with('employees', Employee::get(['id', 'full_name']))
+            ->with('projects', Project::get(['id', 'title']));
     }
 
     /**
@@ -69,7 +98,17 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $task->title = $request->title;
+        $task->description = $request->description;
+        $task->employee_id = $request->employee_id;
+        $task->project_id = $request->project_id;
+        $task->time = $request->time;
+        $task->date = $request->date;
+        $task->notes = $request->notes;
+        $task->active = true;
+        $task->save();
+
+        return redirect('admin/tasks');
     }
 
     /**
@@ -80,6 +119,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+
+        return redirect('admin/tasks');
     }
 }

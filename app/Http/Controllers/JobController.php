@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,6 +39,11 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
         $job = new Job();
         $job->title = $request->title;
         $job->description = $request->description;
@@ -74,6 +83,11 @@ class JobController extends Controller
      */
     public function update(Request $request, Job $job)
     {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
         $job->title = $request->title;
         $job->description = $request->description;
         $job->save();

@@ -7,9 +7,14 @@ use App\Employee;
 use App\Job;
 use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -28,9 +33,9 @@ class EmployeeController extends Controller
     public function create()
     {
         return view('admin.employee.createEmployee')
-        ->with('departments', Department::get(['id', 'name']))
-        ->with('jobs', Job::get(['id','title']))
-        ->with('tags', Tag::get(['id', 'name']));
+            ->with('departments', Department::get(['id', 'name']))
+            ->with('jobs', Job::get(['id', 'title']))
+            ->with('tags', Tag::get(['id', 'name']));
     }
 
     /**
@@ -41,6 +46,13 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'full_name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
         $employee = new Employee();
         $employee->full_name = $request->full_name;
         $employee->email = $request->email;
@@ -48,10 +60,11 @@ class EmployeeController extends Controller
         $employee->address = $request->address;
         $employee->department_id = $request->department_id;
         $employee->job_id = $request->job_id;
-        $employee->isManger = true;
+        $employee->user_id = Auth::id();
         $employee->active = true;
         $employee->save();
         $employee->tags()->attach($request->tag_id);
+
         return redirect('admin/employees');
     }
 
@@ -75,10 +88,10 @@ class EmployeeController extends Controller
     public function edit(Employee $employee)
     {
         return view('admin.employee.editEmployee')
-        ->with('employee', $employee)
-        ->with('departments', Department::get(['id', 'name']))
-        ->with('jobs', Job::get(['id','title']))
-        ->with('tags', Tag::get(['id', 'name']));
+            ->with('employee', $employee)
+            ->with('departments', Department::get(['id', 'name']))
+            ->with('jobs', Job::get(['id', 'title']))
+            ->with('tags', Tag::get(['id', 'name']));
     }
 
     /**
@@ -90,16 +103,22 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
+        $request->validate([
+            'full_name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
         $employee->full_name = $request->full_name;
         $employee->email = $request->email;
         $employee->phone = $request->phone;
         $employee->address = $request->address;
         $employee->department_id = $request->department_id;
         $employee->job_id = $request->job_id;
-        $employee->isManger = true;
-        $employee->active = true;
         $employee->save();
         $employee->tags()->sync($request->tag_id);
+
         return redirect('admin/employees');
     }
 
@@ -114,6 +133,5 @@ class EmployeeController extends Controller
         $employee->delete();
         $employee->tags()->detach();
         return redirect('admin/employees');
-
     }
 }

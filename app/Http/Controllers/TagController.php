@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,6 +39,10 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+        ]);
+
         $tag = new Tag();
         $tag->name = $request->name;
         $tag->save();
@@ -50,7 +58,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        return view('admin.tag.showTag')->with('tag', $tag);
+        //
     }
 
     /**
@@ -73,6 +81,10 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
+        $request->validate([
+            'name' => 'required',
+        ]);
+
         $tag->name = $request->name;
         $tag->save();
 

@@ -8,18 +8,18 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2>
-                        Add Tag
+                        Add Skill - Tag
                         <a href="/admin/tags" class="btn btn-default pull-right">Go Back</a>
                     </h2>
                 </div>
                 <div class="panel-body">
+                    @include('admin._errors')
                     <form method="POST" action="/admin/tags" accept-charset="UTF-8" class="form-horizontal" role="form">
                         @csrf
                         <div class="form-group">
                             <label for="name" class="col-md-2 control-label">Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="name"
-                                    type="text" id="name" />
+                                <input class="form-control" autofocus="autofocus" name="name" type="text" id="name" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>

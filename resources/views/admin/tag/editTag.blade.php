@@ -8,19 +8,20 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2>
-                        Edit Tag
+                        Edit Skill - Tag
                         <a href="/admin/tags" class="btn btn-default pull-right">Go Back</a>
                     </h2>
                 </div>
                 <div class="panel-body">
-                    <form method="POST" action="/admin/tags/{{$tag->id}}" accept-charset="UTF-8"
-                        class="form-horizontal" role="form">
+                    @include('admin._errors')
+                    <form method="POST" action="/admin/tags/{{$tag->id}}" accept-charset="UTF-8" class="form-horizontal"
+                        role="form">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
                             <label for="name" class="col-md-2 control-label">Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="name"
+                                <input class="form-control" autofocus="autofocus" name="name"
                                     type="text" id="name" value="{{$tag->name}}" />
                                 <span class="help-block">
                                     <strong></strong>

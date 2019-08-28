@@ -17,4 +17,13 @@ class Employee extends Model
     public function job(){
         return $this->belongsTo('App\Job');
     }
+
+    public function tasks(){
+        return $this->hasMany('App\Task');
+    }
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
+
 }

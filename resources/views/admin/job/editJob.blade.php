@@ -13,15 +13,16 @@
                     </h2>
                 </div>
                 <div class="panel-body">
-                    <form method="POST" action="/admin/jobs/{{$job->id}}" accept-charset="UTF-8"
-                        class="form-horizontal" role="form">
+                    @include('admin._errors')
+                    <form method="POST" action="/admin/jobs/{{$job->id}}" accept-charset="UTF-8" class="form-horizontal"
+                        role="form">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
                             <label for="title" class="col-md-2 control-label">Title</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="title"
-                                    type="text" id="title" value="{{$job->title}}" />
+                                <input class="form-control" autofocus="autofocus" name="title" type="text" id="title"
+                                    value="{{$job->title}}" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -30,8 +31,8 @@
                         <div class="form-group">
                             <label for="description" class="col-md-2 control-label">Description</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" required="required" name="description" cols="50"
-                                    rows="10" id="description">{{$job->description}}</textarea>
+                                <textarea class="form-control" name="description" cols="50" rows="10"
+                                    id="description">{{$job->description}}</textarea>
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>

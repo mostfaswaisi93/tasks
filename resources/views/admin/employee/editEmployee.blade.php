@@ -13,6 +13,7 @@
                     </h2>
                 </div>
                 <div class="panel-body">
+                    @include('admin._errors')
                     <form method="POST" action="/admin/employees/{{$employee->id}}" accept-charset="UTF-8"
                         class="form-horizontal" role="form">
                         @csrf
@@ -20,7 +21,7 @@
                         <div class="form-group">
                             <label for="full_name" class="col-md-2 control-label">Full Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="full_name"
+                                <input class="form-control" autofocus="autofocus" name="full_name"
                                     type="text" id="full_name" value="{{$employee->full_name}}" />
                                 <span class="help-block">
                                     <strong></strong>
@@ -30,7 +31,7 @@
                         <div class="form-group">
                             <label for="email" class="col-md-2 control-label">Email</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="email"
+                                <input class="form-control" autofocus="autofocus" name="email"
                                     type="text" id="email" value="{{$employee->email}}" />
                                 <span class="help-block">
                                     <strong></strong>
@@ -40,7 +41,7 @@
                         <div class="form-group">
                             <label for="phone" class="col-md-2 control-label">Phone</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="phone"
+                                <input class="form-control" autofocus="autofocus" name="phone"
                                     type="text" id="phone" value="{{$employee->phone}}" />
                                 <span class="help-block">
                                     <strong></strong>
@@ -50,7 +51,7 @@
                         <div class="form-group">
                             <label for="address" class="col-md-2 control-label">Address</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="address"
+                                <input class="form-control" autofocus="autofocus" name="address"
                                     type="text" id="address" value="{{$employee->address}}" />
                                 <span class="help-block">
                                     <strong></strong>
@@ -78,7 +79,7 @@
                                 <select class="form-control" required="required" id="job_id" name="job_id">
                                     @foreach ($jobs as $job)
                                     <option value="{{$job->id}}" @if($job->id == $employee->job_id)
-                                            selected @endif>{{$job->title}}</option>
+                                        selected @endif>{{$job->title}}</option>
                                     @endforeach
                                 </select>
                                 <span class="help-block">
@@ -91,7 +92,7 @@
                             <div class="col-md-8">
                                 <select class="form-control" id="tag_id" name="tag_id[]" multiple>
                                     @foreach ($tags as $tag)
-                                    <option value="{{$tag->id}}" selected @foreach ($employee->tags as $tagEmp)
+                                    <option value="{{$tag->id}}" @foreach ($employee->tags as $tagEmp)
                                         {{$tagEmp->id == $tag->id ? "selected" : ""}}
                                         @endforeach>{{$tag->name}}</option>
                                     @endforeach
