@@ -23,7 +23,6 @@
                                 <th>Department</th>
                                 <th>Job Title</th>
                                 <th>Skills - Tags</th>
-                                <th>Active</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -42,7 +41,6 @@
                                         <br>
                                     @endforeach
                                 </td>
-                                <td>No</td>
                                 <td>
                                     <a href="/admin/employees/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/employees/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>

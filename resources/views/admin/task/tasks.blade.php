@@ -21,10 +21,9 @@
                                 <th>Description</th>
                                 <th>Employee</th>
                                 <th>Project</th>
-                                <th>Time</th>
-                                <th>Date</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
                                 <th>Notes</th>
-                                <th>Active</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -38,7 +37,6 @@
                                 <td>{{$item->start}}</td>
                                 <td>{{$item->end}}</td>
                                 <td>{{$item->notes}}</td>
-                                <td>No</td>
                                 <td>
                                     <a href="/admin/tasks/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/tasks/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>

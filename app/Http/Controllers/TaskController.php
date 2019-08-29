@@ -50,14 +50,16 @@ class TaskController extends Controller
             'description' => 'required'
         ]);
 
+        // dd($request->all());
         $task = new Task();
 
         $task->title = $request->title;
         $task->description = $request->description;
         $task->employee_id = $request->employee_id;
         $task->project_id = $request->project_id;
-        $task->start = Carbon::now($request->time);
-        $task->date = $request->date;
+        $task->start = Carbon::createFromFormat('d/m/Y', $request->start);
+        $task->end = Carbon::createFromFormat('d/m/Y', $request->end);
+        // $task->empEndTask = $request->empEndTask;
         $task->notes = $request->notes;
         $task->active = true;
         $task->save();
@@ -73,6 +75,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        // dd($task->all());
         return view('admin.task.showTask')->with('task', $task);
     }
 
@@ -99,12 +102,19 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+        // dd($request->all());
+
         $task->title = $request->title;
         $task->description = $request->description;
         $task->employee_id = $request->employee_id;
         $task->project_id = $request->project_id;
-        $task->time = $request->time;
-        $task->date = $request->date;
+        $task->start = $request->start;
+        $task->end = $request->end;
+        // $task->empEndTask = $request->empEndTask;
         $task->notes = $request->notes;
         $task->active = true;
         $task->save();

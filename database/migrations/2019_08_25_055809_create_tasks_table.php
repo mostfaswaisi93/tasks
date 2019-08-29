@@ -22,6 +22,7 @@ class CreateTasksTable extends Migration
             $table->string('notes');
             $table->dateTime('start');
             $table->dateTime('end');
+            $table->dateTime('empEndTask');
             $table->boolean('active');
             $table->timestamps();
         });

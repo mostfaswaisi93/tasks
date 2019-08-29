@@ -19,7 +19,6 @@
                                 <th>Title</th>
                                 <th>Description</th>
                                 <th>Department</th>
-                                <th>Active</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -29,7 +28,6 @@
                                 <td>{{$item->title}}</td>
                                 <td>{{$item->description}}</td>
                                 <td>{{$item->department->name}}</td>
-                                <td>Yes</td>
                                 <td>
                                     <a href="/admin/projects/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/projects/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>

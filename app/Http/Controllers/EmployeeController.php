@@ -61,7 +61,7 @@ class EmployeeController extends Controller
         $employee->department_id = $request->department_id;
         $employee->job_id = $request->job_id;
         $employee->user_id = Auth::id();
-        $employee->active = true;
+        // $employee->active = true;
         $employee->save();
         $employee->tags()->attach($request->tag_id);
 
