@@ -27,10 +27,8 @@
                                 <td>{{$item->title}}</td>
                                 <td>{{$item->description}}</td>
                                 <td>
-                                    <a href="/admin/jobs/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/jobs/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
-                                    <form action="/admin/jobs/{{$item->id}}" method="post"
-                                        style="display: inline;">
+                                    <form action="/admin/jobs/{{$item->id}}" method="post" style="display: inline;">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-xs btn-danger">Delete</button>

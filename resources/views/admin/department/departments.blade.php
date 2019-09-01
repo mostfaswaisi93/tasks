@@ -27,7 +27,6 @@
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->description}}</td>
                                 <td>
-                                    <a href="/admin/departments/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/departments/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
                                     <form action="/admin/departments/{{$item->id}}" method="post"
                                         style="display: inline;">

@@ -18,7 +18,7 @@ class CreateProjectsTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('department_id');
-            $table->boolean('active');
+            $table->enum('status', ['active', 'pending', 'deactive'])->default('active');
             $table->timestamps();
         });
     }

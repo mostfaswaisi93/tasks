@@ -19,6 +19,7 @@
                                 <th>Title</th>
                                 <th>Description</th>
                                 <th>Department</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -28,11 +29,10 @@
                                 <td>{{$item->title}}</td>
                                 <td>{{$item->description}}</td>
                                 <td>{{$item->department->name}}</td>
+                                <td>{{$$item->status}}</td>
                                 <td>
-                                    <a href="/admin/projects/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/projects/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
-                                    <form action="/admin/projects/{{$item->id}}" method="post"
-                                        style="display: inline;">
+                                    <form action="/admin/projects/{{$item->id}}" method="post" style="display: inline;">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-xs btn-danger">Delete</button>

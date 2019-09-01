@@ -37,14 +37,14 @@
                                 <td>{{$item->job->title}}</td>
                                 <td>
                                     @foreach ($item->tags as $tag)
-                                        {{$tag->name}}
-                                        <br>
+                                    {{$tag->name}}
+                                    <br>
                                     @endforeach
                                 </td>
                                 <td>
-                                    <a href="/admin/employees/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/employees/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
-                                    <form action="/admin/employees/{{$item->id}}" method="post" style="display: inline;">
+                                    <form action="/admin/employees/{{$item->id}}" method="post"
+                                        style="display: inline;">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-xs btn-danger">Delete</button>
@@ -55,7 +55,7 @@
                         </tbody>
                     </table>
                     <div class="text-center">
-                            {{$employees->render()}}
+                        {{$employees->render()}}
                     </div>
                 </div>
             </div>

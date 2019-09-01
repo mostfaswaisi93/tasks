@@ -4,7 +4,6 @@
 
 <div class="container">
     <div class="row">
-
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -38,7 +37,6 @@
                                 <td>{{$item->end}}</td>
                                 <td>{{$item->notes}}</td>
                                 <td>
-                                    <a href="/admin/tasks/{{$item->id}}" class="btn btn-xs btn-success">Show</a>
                                     <a href="/admin/tasks/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
                                     <form action="/admin/tasks/{{$item->id}}" method="post" style="display: inline;">
                                         @csrf
@@ -51,12 +49,11 @@
                         </tbody>
                     </table>
                     <div class="text-center">
-                            {{$tasks->render()}}
+                        {{$tasks->render()}}
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

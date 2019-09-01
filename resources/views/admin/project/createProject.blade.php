@@ -51,6 +51,19 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="status" class="col-md-2 control-label">Status</label>
+                            <div class="col-md-8">
+                                <select class="form-control" id="status" name="status">
+                                    <option value="active">Active</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="deactive">Deactive</option>
+                                </select>
+                                <span class="help-block">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <div class="col-md-8 col-md-offset-2">
                                 <button type="submit" class="btn btn-primary">
                                     Create

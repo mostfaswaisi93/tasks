@@ -19,6 +19,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        // $projects = Project::orderBy('id', 'asc')->get('id', 'title', 'description', 'active');
         return view('admin.project.projects')->with('projects', Project::paginate(3));
     }
 
@@ -46,10 +47,13 @@ class ProjectController extends Controller
         ]);
 
         $project = new Project();
+
+        // dd($request->all());
+
         $project->title = $request->title;
         $project->description = $request->description;
         $project->department_id = $request->department_id;
-        $project->active = true;
+        $project->status =  $request->status;
         $project->save();
 
         return redirect('admin/projects');
@@ -63,7 +67,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('admin.project.showProject')->with('project', $project);
+        //
     }
 
     /**
@@ -74,7 +78,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.project.editProject')->with('project', $project)->with('departments', Department::get(['id', 'name']));
+        return view('admin.project.editProject')
+            ->with('project', $project)
+            ->with('departments', Department::get(['id', 'name']));
     }
 
     /**

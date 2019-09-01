@@ -47,11 +47,14 @@ class TaskController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            // 'start' => 'required|date',
+            // 'end' => 'required|date|after:start',
+            'notes' => 'required'
         ]);
 
-        // dd($request->all());
         $task = new Task();
+        // dd($request->all());
 
         $task->title = $request->title;
         $task->description = $request->description;
@@ -75,8 +78,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        // dd($task->all());
-        return view('admin.task.showTask')->with('task', $task);
+        //
     }
 
     /**
@@ -104,7 +106,10 @@ class TaskController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            // 'start' => 'required|date',
+            // 'end' => 'required|date|after:start',
+            'notes' => 'required'
         ]);
         // dd($request->all());
 

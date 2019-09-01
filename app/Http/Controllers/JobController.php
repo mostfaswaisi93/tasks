@@ -60,7 +60,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        return view('admin.job.showJob')->with('job', $job);
+        //
     }
 
     /**

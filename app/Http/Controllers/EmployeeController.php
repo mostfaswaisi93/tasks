@@ -76,7 +76,7 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        return view('admin.employee.showEmployee')->with('employee', $employee);
+        //
     }
 
     /**

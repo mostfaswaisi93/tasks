@@ -26,8 +26,7 @@
                                 <td>{{$item->name}}</td>
                                 <td>
                                     <a href="/admin/tags/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
-                                    <form action="/admin/tags/{{$item->id}}" method="post"
-                                        style="display: inline;">
+                                    <form action="/admin/tags/{{$item->id}}" method="post" style="display: inline;">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-xs btn-danger">Delete</button>

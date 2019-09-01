@@ -31,8 +31,8 @@
                         <div class="form-group">
                             <label for="description" class="col-md-2 control-label">Description</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="description" type="text"
-                                    id="description" value="{{$task->description}}" />
+                                <textarea class="form-control" name="description" cols="50" rows="10"
+                                    id="description">{{$task->description}}</textarea>
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -89,8 +89,8 @@
                         <div class="form-group">
                             <label for="notes" class="col-md-2 control-label">Notes</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="notes" type="text" id="notes"
-                                    value="{{$task->notes}}" />
+                                <textarea class="form-control" name="notes" cols="50" rows="10"
+                                    id="notes">{{$task->notes}}</textarea>
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>

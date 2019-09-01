@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <label for="start" class="col-md-2 control-label">Start Time</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="start"
+                                <input class="form-control" autofocus="autofocus" name="start"
                                     type="text" id="start" />
                                 <span class="help-block">
                                     <strong></strong>
@@ -76,7 +76,7 @@
                         <div class="form-group">
                             <label for="end" class="col-md-2 control-label">End Time</label>
                             <div class="col-md-8">
-                                <input class="form-control" required="required" autofocus="autofocus" name="end"
+                                <input class="form-control" autofocus="autofocus" name="end"
                                     type="text" id="end" />
                                 <span class="help-block">
                                     <strong></strong>
@@ -86,7 +86,7 @@
                         <div class="form-group">
                             <label for="notes" class="col-md-2 control-label">Notes</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" required="required" name="notes" cols="50"
+                                <textarea class="form-control" name="notes" cols="50"
                                     rows="10" id="notes"></textarea>
                                 <span class="help-block">
                                     <strong></strong>
