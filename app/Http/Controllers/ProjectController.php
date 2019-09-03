@@ -19,8 +19,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // $projects = Project::orderBy('id', 'asc')->get('id', 'title', 'description', 'active');
-        return view('admin.project.projects')->with('projects', Project::paginate(3));
+        return view('admin.project.projects')
+            ->with('projects', Project::paginate(3));
     }
 
     /**
@@ -30,7 +30,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.project.createProject')->with('departments', Department::get(['id', 'name']));
+        return view('admin.project.createProject')
+            ->with('departments', Department::get(['id', 'name']));
     }
 
     /**
@@ -48,12 +49,10 @@ class ProjectController extends Controller
 
         $project = new Project();
 
-        // dd($request->all());
-
         $project->title = $request->title;
         $project->description = $request->description;
         $project->department_id = $request->department_id;
-        $project->status =  $request->status;
+        // $project->status =  $request->status;
         $project->save();
 
         return redirect('admin/projects');
@@ -100,7 +99,7 @@ class ProjectController extends Controller
         $project->title = $request->title;
         $project->description = $request->description;
         $project->department_id = $request->department_id;
-        $project->active = true;
+        // $project->status =  $request->status;
         $project->save();
 
         return redirect('admin/projects');
@@ -117,5 +116,32 @@ class ProjectController extends Controller
         $project->delete();
 
         return redirect('admin/projects');
+    }
+
+    public function active($id)
+    {
+        $project = Project::find($id);
+        $project->status = 'active';
+        $project->save();
+
+        return redirect()->back();
+    }
+
+    public function pending($id)
+    {
+        $project = Project::find($id);
+        $project->status = 'pending';
+        $project->save();
+
+        return redirect()->back();
+    }
+
+    public function deactive($id)
+    {
+        $project = Project::find($id);
+        $project->status = 'deactive';
+        $project->save();
+
+        return redirect()->back();
     }
 }

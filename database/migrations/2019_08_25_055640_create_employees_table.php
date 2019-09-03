@@ -22,6 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->integer('department_id');
             $table->integer('job_id');
             $table->integer('user_id');
+            $table->enum('status', ['active', 'pending', 'deactive'])->default('active');
             $table->timestamps();
         });
     }

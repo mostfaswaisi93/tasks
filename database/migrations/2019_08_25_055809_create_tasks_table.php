@@ -23,7 +23,7 @@ class CreateTasksTable extends Migration
             $table->dateTime('start');
             $table->dateTime('end');
             $table->dateTime('empEndTask');
-            $table->boolean('active');
+            $table->enum('status', ['active', 'pending', 'deactive'])->default('active');
             $table->timestamps();
         });
     }

@@ -29,8 +29,18 @@
                                 <td>{{$item->title}}</td>
                                 <td>{{$item->description}}</td>
                                 <td>{{$item->department->name}}</td>
-                                <td>{{$$item->status}}</td>
+                                @if ($item->status == 'active')
+                                <td><button class="btn btn-xs btn-primary">Active</button></td>
+                                @elseif ($item->status == 'pending')
+                                <td><button class="btn btn-xs btn-success">Pending</button></td>
+                                @else
+                                <td><button class="btn btn-xs btn-warning">Deactive</button></td>
+                                @endif
                                 <td>
+                                    <a href="/admin/projects/active/{{$item->id}}" class="btn btn-xs btn-primary">A</a>
+                                    <a href="/admin/projects/pending/{{$item->id}}" class="btn btn-xs btn-success">P</a>
+                                    <a href="/admin/projects/deactive/{{$item->id}}"
+                                        class="btn btn-xs btn-warning">D</a>
                                     <a href="/admin/projects/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
                                     <form action="/admin/projects/{{$item->id}}" method="post" style="display: inline;">
                                         @csrf

@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     protected $casts = [
-        'start' => 'date:Y-m-d',
-        'end' => 'date:Y-m-d'
+        'start' => 'datetime:Y-m-d H:i',
+        'end' => 'datetime:Y-m-d H:i'
     ];
 
     public function employee()

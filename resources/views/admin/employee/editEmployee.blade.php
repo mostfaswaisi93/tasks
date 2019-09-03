@@ -21,8 +21,8 @@
                         <div class="form-group">
                             <label for="full_name" class="col-md-2 control-label">Full Name</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="full_name"
-                                    type="text" id="full_name" value="{{$employee->full_name}}" />
+                                <input class="form-control" autofocus="autofocus" name="full_name" type="text"
+                                    id="full_name" value="{{$employee->full_name}}" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -31,8 +31,8 @@
                         <div class="form-group">
                             <label for="email" class="col-md-2 control-label">Email</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="email"
-                                    type="text" id="email" value="{{$employee->email}}" />
+                                <input class="form-control" autofocus="autofocus" name="email" type="text" id="email"
+                                    value="{{$employee->email}}" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -41,8 +41,8 @@
                         <div class="form-group">
                             <label for="phone" class="col-md-2 control-label">Phone</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="phone"
-                                    type="text" id="phone" value="{{$employee->phone}}" />
+                                <input class="form-control" autofocus="autofocus" name="phone" type="text" id="phone"
+                                    value="{{$employee->phone}}" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -51,8 +51,8 @@
                         <div class="form-group">
                             <label for="address" class="col-md-2 control-label">Address</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="address"
-                                    type="text" id="address" value="{{$employee->address}}" />
+                                <input class="form-control" autofocus="autofocus" name="address" type="text"
+                                    id="address" value="{{$employee->address}}" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -96,6 +96,19 @@
                                         {{$tagEmp->id == $tag->id ? "selected" : ""}}
                                         @endforeach>{{$tag->name}}</option>
                                     @endforeach
+                                </select>
+                                <span class="help-block">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="status" class="col-md-2 control-label">Status</label>
+                            <div class="col-md-8">
+                                <select class="form-control" id="status" name="status">
+                                    <option value="active">Active</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="deactive">Deactive</option>
                                 </select>
                                 <span class="help-block">
                                     <strong></strong>

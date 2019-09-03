@@ -81,16 +81,17 @@ class DepartmentController extends Controller
      * @param  \App\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Department $department)
+
+    public function update(Request $request)
     {
         $request->validate([
             'name' => 'required',
             'description' => 'required'
         ]);
 
-        $department->name = $request->name;
-        $department->description = $request->description;
-        $department->save();
+        // dd($request->all());
+        $department = Department::findOrFail($request->dep_id);
+        $department->update($request->all());
 
         return redirect('admin/departments');
     }
@@ -101,10 +102,11 @@ class DepartmentController extends Controller
      * @param  \App\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Department $department)
-    {
-        $department->delete();
 
-        return redirect('admin/departments');
+    public function destroy(Request $request)
+    {
+        $department = Department::findOrFail($request->dep_id);
+        $department->delete();
+        return back();
     }
 }

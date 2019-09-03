@@ -72,35 +72,23 @@ class TagController extends Controller
         return view('admin.tag.editTag')->with('tag', $tag);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request)
     {
         $request->validate([
             'name' => 'required',
         ]);
 
-        $tag->name = $request->name;
-        $tag->save();
+        // dd($request->all());
+        $tag = Tag::findOrFail($request->tag_id);
+        $tag->update($request->all());
 
         return redirect('admin/tags');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Tag $tag)
+    public function destroy(Request $request)
     {
+        $tag = Tag::findOrFail($request->tag_id);
         $tag->delete();
-
-        return redirect('admin/tags');
+        return back();
     }
 }

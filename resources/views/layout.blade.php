@@ -7,11 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tasks</title>
     <!-- Styles -->
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+        rel="stylesheet">
 
-</head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/js/all.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css">
+   </head>
 
 <body>
     <nav class="navbar navbar-default navbar-static-top">
@@ -26,19 +42,18 @@
                     <span class="icon-bar"></span>
                 </button>
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="/">
+                {{-- <a class="navbar-brand" href="/">
                     Tasks
-                </a>
+                </a> --}}
             </div>
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="/admin/employees">Employees</a></li>
-                    <li><a href="/admin/departments">Departments</a></li>
                     <li><a href="/admin/tasks">Tasks</a></li>
+                    <li><a href="/admin/employees">Employees</a></li>
                     <li><a href="/admin/projects">Projects</a></li>
-                    <li><a href="/admin/tags">Skills - Tags</a></li>
-                    <li><a href="/admin/jobs">Jobs</a></li>
+                    <li><a href="/admin/departments">Departments</a></li>
+                    <li><a href="/admin/tags">Skills</a></li>
                 </ul>
                 <!-- Right Side Of Navbar -->
                 @guest
@@ -79,6 +94,10 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    {{-- @stack('javascript') --}}
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" ></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js" ></script>
+
 </body>
 
 </html>

@@ -45,11 +45,15 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'start'        => 'date_format:H:i',
+            'end'          => 'date_format:H:i|after:start',
+        ];
+
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            // 'start' => 'required|date',
-            // 'end' => 'required|date|after:start',
+            $rules,
             'notes' => 'required'
         ]);
 
@@ -60,11 +64,11 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->employee_id = $request->employee_id;
         $task->project_id = $request->project_id;
-        $task->start = Carbon::createFromFormat('d/m/Y', $request->start);
-        $task->end = Carbon::createFromFormat('d/m/Y', $request->end);
-        // $task->empEndTask = $request->empEndTask;
+        $task->start = Carbon::createFromFormat('H:i', $request->start);
+        $task->end = Carbon::createFromFormat('H:i', $request->end);
+        $task->empEndTask = NULL;
         $task->notes = $request->notes;
-        $task->active = true;
+        // $task->status =  $request->status;
         $task->save();
 
         return redirect('admin/tasks');
@@ -104,24 +108,29 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        $rules = [
+            'start'        => 'date_format:H:i',
+            'end'          => 'date_format:H:i|after:start',
+        ];
+
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            // 'start' => 'required|date',
-            // 'end' => 'required|date|after:start',
+            $rules,
             'notes' => 'required'
         ]);
+
         // dd($request->all());
 
         $task->title = $request->title;
         $task->description = $request->description;
         $task->employee_id = $request->employee_id;
         $task->project_id = $request->project_id;
-        $task->start = $request->start;
-        $task->end = $request->end;
-        // $task->empEndTask = $request->empEndTask;
+        $task->start = Carbon::createFromFormat('H:i', $request->start);
+        $task->end = Carbon::createFromFormat('H:i', $request->end);
+        $task->empEndTask = NULL;
         $task->notes = $request->notes;
-        $task->active = true;
+        // $task->status =  $request->status;
         $task->save();
 
         return redirect('admin/tasks');
@@ -138,5 +147,32 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect('admin/tasks');
+    }
+
+    public function active($id)
+    {
+        $task = Task::find($id);
+        $task->status = 'active';
+        $task->save();
+
+        return redirect()->back();
+    }
+
+    public function pending($id)
+    {
+        $task = Task::find($id);
+        $task->status = 'pending';
+        $task->save();
+
+        return redirect()->back();
+    }
+
+    public function deactive($id)
+    {
+        $task = Task::find($id);
+        $task->status = 'deactive';
+        $task->save();
+
+        return redirect()->back();
     }
 }

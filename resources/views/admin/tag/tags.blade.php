@@ -8,12 +8,13 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2>
-                        Skills - Tags
-                        <a href="/admin/tags/create" class="btn btn-default pull-right">Add New</a>
+                        Skills
+                        <button type="button" class="btn btn-success pull-right" data-toggle="modal"
+                            data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
                     </h2>
                 </div>
                 <div class="panel-body">
-                    <table class="table">
+                    <table class="table" id="datatable">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -25,12 +26,13 @@
                             <tr>
                                 <td>{{$item->name}}</td>
                                 <td>
-                                    <a href="/admin/tags/{{$item->id}}/edit" class="btn btn-xs btn-info">Edit</a>
-                                    <form action="/admin/tags/{{$item->id}}" method="post" style="display: inline;">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-xs btn-danger">Delete</button>
-                                    </form>
+                                    <button class="btn btn-xs btn-info" data-myname="{{$item->name}}"
+                                        data-tagid="{{$item->id}}" data-toggle="modal" data-target="#edit"><i
+                                            class="far fa-edit"></i>
+                                        Edit</button>
+                                    <button class="btn btn-xs btn-danger" data-tagid={{$item->id}} data-toggle="modal"
+                                        data-target="#delete"> <i class="fa fa-trash" aria-hidden="true"></i>
+                                        Delete</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -44,5 +46,40 @@
         </div>
     </div>
 </div>
+
+@include('admin.tag._createTag')
+@include('admin.tag._editTag')
+@include('admin.tag._deleteTag')
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#datatable').DataTable({
+            "paging": false
+        });
+
+        // Start Edit
+
+        $('#edit').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var name = button.data('myname')
+            var tag_id = button.data('tagid')
+            var modal = $(this)
+
+            modal.find('.modal-body #name').val(name);
+            modal.find('.modal-body #tag_id').val(tag_id);
+
+        })
+
+        // Start Delete
+
+        $('#delete').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var tag_id = button.data('tagid')
+            var modal = $(this)
+            modal.find('.modal-body #tag_id').val(tag_id);
+        })
+    })
+
+</script>
 
 @endsection

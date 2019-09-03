@@ -22,7 +22,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return view('admin.employee.employees')->with('employees', Employee::paginate(3));
+        return view('admin.employee.employees')
+            ->with('employees', Employee::paginate(3));
     }
 
     /**
@@ -61,7 +62,7 @@ class EmployeeController extends Controller
         $employee->department_id = $request->department_id;
         $employee->job_id = $request->job_id;
         $employee->user_id = Auth::id();
-        // $employee->active = true;
+        // $employee->status =  $request->status;
         $employee->save();
         $employee->tags()->attach($request->tag_id);
 
@@ -116,6 +117,7 @@ class EmployeeController extends Controller
         $employee->address = $request->address;
         $employee->department_id = $request->department_id;
         $employee->job_id = $request->job_id;
+        // $employee->status =  $request->status;
         $employee->save();
         $employee->tags()->sync($request->tag_id);
 
@@ -133,5 +135,32 @@ class EmployeeController extends Controller
         $employee->delete();
         $employee->tags()->detach();
         return redirect('admin/employees');
+    }
+
+    public function active($id)
+    {
+        $employee = Employee::find($id);
+        $employee->status = 'active';
+        $employee->save();
+
+        return redirect()->back();
+    }
+
+    public function pending($id)
+    {
+        $employee = Employee::find($id);
+        $employee->status = 'pending';
+        $employee->save();
+
+        return redirect()->back();
+    }
+
+    public function deactive($id)
+    {
+        $employee = Employee::find($id);
+        $employee->status = 'deactive';
+        $employee->save();
+
+        return redirect()->back();
     }
 }

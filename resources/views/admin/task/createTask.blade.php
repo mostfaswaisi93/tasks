@@ -13,15 +13,14 @@
                     </h2>
                 </div>
                 <div class="panel-body">
-                        @include('admin._errors')
+                    @include('admin._errors')
                     <form method="POST" action="/admin/tasks" accept-charset="UTF-8" class="form-horizontal"
                         role="form">
                         @csrf
                         <div class="form-group">
                             <label for="title" class="col-md-2 control-label">Title</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="title"
-                                    type="text" id="title" />
+                                <input class="form-control" autofocus="autofocus" name="title" type="text" id="title" />
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -30,8 +29,8 @@
                         <div class="form-group">
                             <label for="description" class="col-md-2 control-label">Description</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" name="description" cols="50"
-                                    rows="10" id="description"></textarea>
+                                <textarea class="form-control" name="description" cols="50" rows="10"
+                                    id="description"></textarea>
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -66,8 +65,8 @@
                         <div class="form-group">
                             <label for="start" class="col-md-2 control-label">Start Time</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="start"
-                                    type="text" id="start" />
+                                <input class="timepickerStart form-control" autofocus="autofocus" name="start"
+                                    type="text" id="start">
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -76,8 +75,8 @@
                         <div class="form-group">
                             <label for="end" class="col-md-2 control-label">End Time</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="end"
-                                    type="text" id="end" />
+                                <input class="timepickerEnd form-control" autofocus="autofocus" name="end" type="text"
+                                    id="end">
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -86,8 +85,7 @@
                         <div class="form-group">
                             <label for="notes" class="col-md-2 control-label">Notes</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" name="notes" cols="50"
-                                    rows="10" id="notes"></textarea>
+                                <textarea class="form-control" name="notes" cols="50" rows="10" id="notes"></textarea>
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -106,5 +104,30 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var dateNow = new Date();
+
+    $('.timepickerStart').datetimepicker({
+        format: 'HH:mm',
+        defaultDate:dateNow
+    });
+    $('.timepickerEnd').datetimepicker({
+        format: 'HH:mm',
+        defaultDate:dateNow
+    });
+
+
+    $('#start').on('dp.change', function(e){
+        // console.log(e.timeStamp);
+        var new_time =  moment(e.timeStamp).add(20, 'm').format("HH:mm");
+        $('body').find('#end').val(new_time);
+     })
+
+</script>
 
 @endsection
+{{-- @push('javascript') --}}
+
+
+
+{{-- @endpush --}}

@@ -69,8 +69,8 @@
                         <div class="form-group">
                             <label for="start" class="col-md-2 control-label">Start Time</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="start" type="text" id="start"
-                                    value="{{$task->start}}" />
+                                <input class="timepickerStart form-control" autofocus="autofocus" name="start"
+                                    type="text" id="start" value="{{$task->start}}">
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -79,8 +79,8 @@
                         <div class="form-group">
                             <label for="end" class="col-md-2 control-label">End Time</label>
                             <div class="col-md-8">
-                                <input class="form-control" autofocus="autofocus" name="end" type="text" id="end"
-                                    value="{{$task->end}}" />
+                                <input class="timepickerEnd form-control" autofocus="autofocus" name="end" type="text"
+                                    id="end" value="{{$task->end}}">
                                 <span class="help-block">
                                     <strong></strong>
                                 </span>
@@ -96,6 +96,19 @@
                                 </span>
                             </div>
                         </div>
+                        {{-- <div class="form-group">
+                            <label for="status" class="col-md-2 control-label">Status</label>
+                            <div class="col-md-8">
+                                <select class="form-control" id="status" name="status">
+                                    <option value="active">Active</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="deactive">Deactive</option>
+                                </select>
+                                <span class="help-block">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div> --}}
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-2">
                                 <button type="submit" class="btn btn-primary">
@@ -109,5 +122,23 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    $('.timepickerStart').datetimepicker({
+        format: 'hh:mm',
+    });
+    $('.timepickerEnd').datetimepicker({
+        format: 'hh:mm',
+    });
+
+
+    $('#start').on('dp.change', function(e){
+        // console.log(e.timeStamp);
+        var new_time =  moment(e.timeStamp).add(20, 'm').format("hh:mm");
+        $('body').find('#end').val(new_time);
+     })
+
+</script>
 
 @endsection
