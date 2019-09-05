@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\Employee;
-use App\Job;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +34,6 @@ class EmployeeController extends Controller
     {
         return view('admin.employee.createEmployee')
             ->with('departments', Department::get(['id', 'name']))
-            ->with('jobs', Job::get(['id', 'title']))
             ->with('tags', Tag::get(['id', 'name']));
     }
 
@@ -60,7 +58,6 @@ class EmployeeController extends Controller
         $employee->phone = $request->phone;
         $employee->address = $request->address;
         $employee->department_id = $request->department_id;
-        $employee->job_id = $request->job_id;
         $employee->user_id = Auth::id();
         // $employee->status =  $request->status;
         $employee->save();
@@ -91,7 +88,6 @@ class EmployeeController extends Controller
         return view('admin.employee.editEmployee')
             ->with('employee', $employee)
             ->with('departments', Department::get(['id', 'name']))
-            ->with('jobs', Job::get(['id', 'title']))
             ->with('tags', Tag::get(['id', 'name']));
     }
 
@@ -116,7 +112,6 @@ class EmployeeController extends Controller
         $employee->phone = $request->phone;
         $employee->address = $request->address;
         $employee->department_id = $request->department_id;
-        $employee->job_id = $request->job_id;
         // $employee->status =  $request->status;
         $employee->save();
         $employee->tags()->sync($request->tag_id);
@@ -137,14 +132,12 @@ class EmployeeController extends Controller
         return redirect('admin/employees');
     }
 
-    public function active($id)
-    {
-        $employee = Employee::find($id);
-        $employee->status = 'active';
-        $employee->save();
-
-        return redirect()->back();
-    }
+    // public function destroy(Request $request)
+    // {
+    //     $project = Project::findOrFail($request->project_id);
+    //     $project->delete();
+    //     return back();
+    // }
 
     public function pending($id)
     {
@@ -155,10 +148,46 @@ class EmployeeController extends Controller
         return redirect()->back();
     }
 
-    public function deactive($id)
+    public function in_progress($id)
     {
         $employee = Employee::find($id);
-        $employee->status = 'deactive';
+        $employee->status = 'in_progress';
+        $employee->save();
+
+        return redirect()->back();
+    }
+
+    public function done($id)
+    {
+        $employee = Employee::find($id);
+        $employee->status = 'done';
+        $employee->save();
+
+        return redirect()->back();
+    }
+
+    public function completed($id)
+    {
+        $employee = Employee::find($id);
+        $employee->status = 'completed';
+        $employee->save();
+
+        return redirect()->back();
+    }
+
+    public function cancel($id)
+    {
+        $employee = Employee::find($id);
+        $employee->status = 'cancel';
+        $employee->save();
+
+        return redirect()->back();
+    }
+
+    public function late($id)
+    {
+        $employee = Employee::find($id);
+        $employee->status = 'late';
         $employee->save();
 
         return redirect()->back();

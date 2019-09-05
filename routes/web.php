@@ -3,9 +3,12 @@
 Route::get('/', 'HomeController@index');
 Route::get('/task/{id}', 'HomeController@show');
 
-// Route::get('/admin/projects/active/{id}', 'ProjectController@active');
-// Route::get('/admin/projects/pending/{id}', 'ProjectController@pending');
-// Route::get('/admin/projects/deactive/{id}', 'ProjectController@deactive');
+Route::get('/admin/projects/pending/{id}', 'ProjectController@pending');
+Route::get('/admin/projects/in_progress/{id}', 'ProjectController@in_progress');
+Route::get('/admin/projects/done/{id}', 'ProjectController@done');
+Route::get('/admin/projects/completed/{id}', 'ProjectController@completed');
+Route::get('/admin/projects/cancel/{id}', 'ProjectController@cancel');
+Route::get('/admin/projects/late/{id}', 'ProjectController@late');
 
 // Route::get('/admin/employees/active/{id}', 'EmployeeController@active');
 // Route::get('/admin/employees/pending/{id}', 'EmployeeController@pending');

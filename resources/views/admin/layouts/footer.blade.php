@@ -51,22 +51,66 @@
 <script src="{{url('/design/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{url('/design/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
 
-<!-- page script -->
-<script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/js/all.min.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#datatable').DataTable({
+            // 'paging'      : true,
+            // 'searching'   : true,
+        });
+
+        // Start Edit
+
+        $('#edit').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var name = button.data('myname')
+            var description = button.data('mydes')
+            var department = button.data('mydepartment')
+            var title = button.data('mytitle')
+            var project_id = button.data('projectid')
+            var dep_id = button.data('depid')
+            var tag_id = button.data('tagid')
+            var modal = $(this)
+
+            modal.find('.modal-body #name').val(name);
+            modal.find('.modal-body #title').val(title);
+            modal.find('.modal-body #description').val(description);
+            modal.find('.modal-body #project_id').val(project_id);
+            modal.find('.modal-body #dep_id').val(dep_id);
+            modal.find('.modal-body #tag_id').val(tag_id);
+
+        })
+
+        // Start Delete
+
+        $('#delete').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var project_id = button.data('projectid')
+            var dep_id = button.data('depid')
+            var tag_id = button.data('tagid')
+            var modal = $(this)
+            modal.find('.modal-body #project_id').val(project_id);
+            modal.find('.modal-body #dep_id').val(dep_id);
+            modal.find('.modal-body #tag_id').val(tag_id);
+        })
+
+        $('#show').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var description = button.data('mydes')
+            var department = button.data('mydepartment')
+            var title = button.data('mytitle')
+            var project_id = button.data('projectid')
+            var modal = $(this)
+
+            modal.find('.modal-body #title').val(title);
+            modal.find('.modal-body #description').val(description);
+            modal.find('.modal-body #project_id').val(project_id);
+        })
     })
-  })
+
 </script>
-
-
 
 </body>
 

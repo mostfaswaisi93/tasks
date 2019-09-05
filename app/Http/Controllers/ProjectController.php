@@ -20,7 +20,8 @@ class ProjectController extends Controller
     public function index()
     {
         return view('admin.project.projects')
-            ->with('projects', Project::paginate(3));
+            ->with('projects', Project::paginate(3))
+            ->with('departments', Department::get(['id', 'name']));
     }
 
     /**
@@ -30,8 +31,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.project.createProject')
-            ->with('departments', Department::get(['id', 'name']));
+        //
     }
 
     /**
@@ -77,9 +77,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.project.editProject')
-            ->with('project', $project)
-            ->with('departments', Department::get(['id', 'name']));
+        //
     }
 
     /**
@@ -89,18 +87,17 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+
+    public function update(Request $request)
     {
         $request->validate([
             'title' => 'required',
             'description' => 'required'
         ]);
 
-        $project->title = $request->title;
-        $project->description = $request->description;
-        $project->department_id = $request->department_id;
-        // $project->status =  $request->status;
-        $project->save();
+        // dd($request->all());
+        $project = Project::findOrFail($request->project_id);
+        $project->update($request->all());
 
         return redirect('admin/projects');
     }
@@ -111,20 +108,12 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project)
+
+    public function destroy(Request $request)
     {
+        $project = Project::findOrFail($request->project_id);
         $project->delete();
-
-        return redirect('admin/projects');
-    }
-
-    public function active($id)
-    {
-        $project = Project::find($id);
-        $project->status = 'active';
-        $project->save();
-
-        return redirect()->back();
+        return back();
     }
 
     public function pending($id)
@@ -136,10 +125,46 @@ class ProjectController extends Controller
         return redirect()->back();
     }
 
-    public function deactive($id)
+    public function in_progress($id)
     {
         $project = Project::find($id);
-        $project->status = 'deactive';
+        $project->status = 'in_progress';
+        $project->save();
+
+        return redirect()->back();
+    }
+
+    public function done($id)
+    {
+        $project = Project::find($id);
+        $project->status = 'done';
+        $project->save();
+
+        return redirect()->back();
+    }
+
+    public function completed($id)
+    {
+        $project = Project::find($id);
+        $project->status = 'completed';
+        $project->save();
+
+        return redirect()->back();
+    }
+
+    public function cancel($id)
+    {
+        $project = Project::find($id);
+        $project->status = 'cancel';
+        $project->save();
+
+        return redirect()->back();
+    }
+
+    public function late($id)
+    {
+        $project = Project::find($id);
+        $project->status = 'late';
         $project->save();
 
         return redirect()->back();
