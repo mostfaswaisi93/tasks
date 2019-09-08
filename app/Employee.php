@@ -12,6 +12,11 @@ class Employee extends Model
         'user_id', 'status'
     ];
 
+    public function tasks()
+    {
+        return $this->belongsToMany('App\Task');
+    }
+
     public function department()
     {
         return $this->belongsTo('App\Department');
@@ -20,11 +25,6 @@ class Employee extends Model
     public function tags()
     {
         return $this->belongsToMany('App\Tag');
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany('App\Task');
     }
 
     public function user()

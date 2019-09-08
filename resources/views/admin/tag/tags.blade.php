@@ -22,18 +22,20 @@
                     <tr>
                         <td>{{$item->name}}</td>
                         <td>
-                            <button class="btn btn-primary" data-myname="{{$item->name}}"
-                                data-tagid="{{$item->id}}" data-toggle="modal" data-target="#edit"><i
-                                    class="far fa-edit"></i>
-                                </button>
+                            <button class="btn btn-primary" data-myname="{{$item->name}}" data-tagid="{{$item->id}}"
+                                data-toggle="modal" data-target="#edit"><i class="far fa-edit"></i>
+                            </button>
                             <button class="btn btn-danger" data-tagid={{$item->id}} data-toggle="modal"
                                 data-target="#delete"> <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button>
+                            </button>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class="text-center">
+                {{$tags->render()}}
+            </div>
         </div>
     </div>
 </div>

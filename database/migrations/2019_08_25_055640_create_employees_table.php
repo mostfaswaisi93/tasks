@@ -22,7 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->string('job_title');
             $table->integer('department_id');
             $table->integer('user_id');
-            $table->enum('status', ['pending', 'in_progress', 'done', 'completed', 'cancel', 'late'])->default('pending');
+            $table->enum('status', ['pending', 'in_progress', 'completed', 'inactive', 'leave'])->default('pending');
             $table->timestamps();
         });
     }

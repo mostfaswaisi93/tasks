@@ -17,7 +17,6 @@ class CreateTasksTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('description');
-            $table->integer('employee_id');
             $table->integer('project_id');
             $table->string('notes');
             $table->dateTime('start');

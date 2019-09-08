@@ -27,17 +27,19 @@
                             <button class="btn btn-primary" data-myname="{{$item->name}}"
                                 data-mydes="{{$item->description}}" data-depid="{{$item->id}}" data-toggle="modal"
                                 data-target="#edit"><i class="far fa-edit"></i>
-                                </button>
+                            </button>
                             <button class="btn btn-danger" data-depid={{$item->id}} data-toggle="modal"
                                 data-target="#delete"> <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button>
+                            </button>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class="text-center">
+                {{$departments->render()}}
+            </div>
         </div>
-        <!-- /.box-body -->
     </div>
 </div>
 

@@ -22,7 +22,9 @@ class EmployeeController extends Controller
     public function index()
     {
         return view('admin.employee.employees')
-            ->with('employees', Employee::paginate(3));
+            ->with('employees', Employee::paginate(3))
+            ->with('departments', Department::get(['id', 'name']))
+            ->with('tags', Tag::get(['id', 'name']));
     }
 
     /**
@@ -32,9 +34,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('admin.employee.createEmployee')
-            ->with('departments', Department::get(['id', 'name']))
-            ->with('tags', Tag::get(['id', 'name']));
+        //
     }
 
     /**
@@ -50,6 +50,7 @@ class EmployeeController extends Controller
             'email' => 'required',
             'phone' => 'required',
             'address' => 'required',
+            'job_title' => 'required',
         ]);
 
         $employee = new Employee();
@@ -57,9 +58,9 @@ class EmployeeController extends Controller
         $employee->email = $request->email;
         $employee->phone = $request->phone;
         $employee->address = $request->address;
+        $employee->job_title = $request->job_title;
         $employee->department_id = $request->department_id;
         $employee->user_id = Auth::id();
-        // $employee->status =  $request->status;
         $employee->save();
         $employee->tags()->attach($request->tag_id);
 
@@ -85,10 +86,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        return view('admin.employee.editEmployee')
-            ->with('employee', $employee)
-            ->with('departments', Department::get(['id', 'name']))
-            ->with('tags', Tag::get(['id', 'name']));
+        //
     }
 
     /**
@@ -98,22 +96,19 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employee $employee)
+
+    public function update(Request $request)
     {
         $request->validate([
             'full_name' => 'required',
             'email' => 'required',
             'phone' => 'required',
             'address' => 'required',
+            'job_title' => 'required',
         ]);
-
-        $employee->full_name = $request->full_name;
-        $employee->email = $request->email;
-        $employee->phone = $request->phone;
-        $employee->address = $request->address;
-        $employee->department_id = $request->department_id;
-        // $employee->status =  $request->status;
-        $employee->save();
+        dd($request->all());
+        $employee = Employee::findOrFail($request->employee_id);
+        $employee->update($request->all());
         $employee->tags()->sync($request->tag_id);
 
         return redirect('admin/employees');
@@ -125,19 +120,15 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+
+    public function destroy(Request $request)
     {
+        $employee = Employee::findOrFail($request->employee_id);
         $employee->delete();
         $employee->tags()->detach();
-        return redirect('admin/employees');
-    }
 
-    // public function destroy(Request $request)
-    // {
-    //     $project = Project::findOrFail($request->project_id);
-    //     $project->delete();
-    //     return back();
-    // }
+        return back();
+    }
 
     public function pending($id)
     {
@@ -157,15 +148,6 @@ class EmployeeController extends Controller
         return redirect()->back();
     }
 
-    public function done($id)
-    {
-        $employee = Employee::find($id);
-        $employee->status = 'done';
-        $employee->save();
-
-        return redirect()->back();
-    }
-
     public function completed($id)
     {
         $employee = Employee::find($id);
@@ -175,19 +157,19 @@ class EmployeeController extends Controller
         return redirect()->back();
     }
 
-    public function cancel($id)
+    public function inactive($id)
     {
         $employee = Employee::find($id);
-        $employee->status = 'cancel';
+        $employee->status = 'inactive';
         $employee->save();
 
         return redirect()->back();
     }
 
-    public function late($id)
+    public function leave($id)
     {
         $employee = Employee::find($id);
-        $employee->status = 'late';
+        $employee->status = 'leave';
         $employee->save();
 
         return redirect()->back();

@@ -22,6 +22,7 @@ class ProjectController extends Controller
         return view('admin.project.projects')
             ->with('projects', Project::paginate(3))
             ->with('departments', Department::get(['id', 'name']));
+            // ->with('project', Project::get());
     }
 
     /**

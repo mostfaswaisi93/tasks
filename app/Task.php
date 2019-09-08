@@ -11,9 +11,15 @@ class Task extends Model
         'end' => 'datetime:Y-m-d H:i'
     ];
 
-    public function employee()
+    protected $fillable = [
+        'title', 'description',
+        'project_id', 'notes', 'start',
+        'end', 'status'
+    ];
+
+    public function employees()
     {
-        return $this->belongsTo('App\Employee');
+        return $this->belongsToMany('App\Employee');
     }
 
     public function project()

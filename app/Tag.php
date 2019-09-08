@@ -10,7 +10,8 @@ class Tag extends Model
         'name'
     ];
 
-    public function employees(){
+    public function employees()
+    {
         return $this->belongsToMany('App\Employee');
     }
 }

@@ -16,7 +16,6 @@
                         <th>Title</th>
                         <th>Department</th>
                         <th>Status</th>
-                        <th>Select Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -27,22 +26,22 @@
                         <td>{{$item->department->name}}</td>
                         @if ($item->status == 'pending')
                         <td><button class="btn btn-info" style="width: 107px;"><i class="fas fa-clock"></i>
-                                Pending</button>@include('admin._select')</td>
+                                Pending</button>@include('admin.project._select')</td>
                         @elseif ($item->status == 'in_progress')
                         <td><button class="btn btn-primary" style="width: 107px;"><i class="fas fa-spinner"></i>
-                                In Progress</button>@include('admin._select')</td>
+                                In Progress</button>@include('admin.project._select')</td>
                         @elseif ($item->status == 'done')
                         <td><button class="btn btn-success" style="width: 107px;"><i class="fas fa-check"></i>
-                                Done</button>@include('admin._select')</td>
+                                Done</button>@include('admin.project._select')</td>
                         @elseif ($item->status == 'completed')
                         <td><button class="btn btn-success" style="width: 107px;"><i class="fas fa-check-circle"></i>
-                                Completed</button>@include('admin._select')</td>
+                                Completed</button>@include('admin.project._select')</td>
                         @elseif ($item->status == 'cancel')
                         <td><button class="btn btn-danger" style="width: 107px;"><i class="fas fa-window-close"></i>
-                                Cancel</button>@include('admin._select')</td>
+                                Cancel</button>@include('admin.project._select')</td>
                         @else
                         <td><button class="btn btn-warning" style="width: 107px;"><i class="fas fa-cog"></i>
-                                Late</button>@include('admin._select')</td>
+                                Late</button>@include('admin.project._select')</td>
                         @endif
                         <td>
                             <button class="btn btn-info" data-mytitle="{{$item->title}}"
@@ -62,6 +61,9 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="text-center">
+                {{$projects->render()}}
+            </div>
         </div>
     </div>
 </div>
