@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Tag;
+use App\Skill;
 use Illuminate\Http\Request;
 
-class TagController extends Controller
+class SkillController extends Controller
 {
     public function __construct()
     {
@@ -18,7 +18,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        return view('admin.tag.tags')->with('tags', Tag::paginate(3));
+        return view('admin.skill.skills')->with('skills', Skill::paginate(3));
     }
 
     /**
@@ -43,20 +43,20 @@ class TagController extends Controller
             'name' => 'required',
         ]);
 
-        $tag = new Tag();
-        $tag->name = $request->name;
-        $tag->save();
+        $skill = new Skill();
+        $skill->name = $request->name;
+        $skill->save();
 
-        return redirect('admin/tags');
+        return redirect('admin/skills');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Tag  $tag
+     * @param  \App\Skill  $skill
      * @return \Illuminate\Http\Response
      */
-    public function show(Tag $tag)
+    public function show(Skill $skill)
     {
         //
     }
@@ -64,12 +64,12 @@ class TagController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Tag  $tag
+     * @param  \App\Skill  $skill
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tag $tag)
+    public function edit(Skill $skill)
     {
-        return view('admin.tag.editTag')->with('tag', $tag);
+        //
     }
 
     public function update(Request $request)
@@ -79,16 +79,16 @@ class TagController extends Controller
         ]);
 
         // dd($request->all());
-        $tag = Tag::findOrFail($request->tag_id);
-        $tag->update($request->all());
+        $skill = Skill::findOrFail($request->skill_id);
+        $skill->update($request->all());
 
-        return redirect('admin/tags');
+        return redirect('admin/skills');
     }
 
     public function destroy(Request $request)
     {
-        $tag = Tag::findOrFail($request->tag_id);
-        $tag->delete();
+        $skill = Skill::findOrFail($request->skill_id);
+        $skill->delete();
         return back();
     }
 }

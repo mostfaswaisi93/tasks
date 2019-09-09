@@ -4,8 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
+class Skill extends Model
 {
+    // protected $guarded = [];
     protected $fillable = [
         'name'
     ];
@@ -14,4 +15,5 @@ class Tag extends Model
     {
         return $this->belongsToMany('App\Employee');
     }
+
 }

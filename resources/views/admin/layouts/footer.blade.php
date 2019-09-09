@@ -41,7 +41,7 @@
             var name = button.data('myname')
             var description = button.data('mydes')
             var department = button.data('mydepartment')
-            var tag = button.data('mytag')
+            var skill = button.data('myskill')
             var title = button.data('mytitle')
             var full_name = button.data('myfull_name')
             var email = button.data('myemail')
@@ -51,7 +51,7 @@
             var employee_id = button.data('employeeid')
             var project_id = button.data('projectid')
             var dep_id = button.data('depid')
-            var tag_id = button.data('tagid')
+            var skill_id = button.data('skillid')
             var modal = $(this)
 
             modal.find('.modal-body #name').val(name);
@@ -65,7 +65,7 @@
             modal.find('.modal-body #employee_id').val(employee_id);
             modal.find('.modal-body #project_id').val(project_id);
             modal.find('.modal-body #dep_id').val(dep_id);
-            modal.find('.modal-body #tag_id').val(tag_id);
+            modal.find('.modal-body #skill_id').val(skill_id);
 
         })
 
@@ -76,12 +76,12 @@
             var employee_id = button.data('employeeid')
             var project_id = button.data('projectid')
             var dep_id = button.data('depid')
-            var tag_id = button.data('tagid')
+            var skill_id = button.data('skillid')
             var modal = $(this)
             modal.find('.modal-body #employee_id').val(employee_id);
             modal.find('.modal-body #project_id').val(project_id);
             modal.find('.modal-body #dep_id').val(dep_id);
-            modal.find('.modal-body #tag_id').val(tag_id);
+            modal.find('.modal-body #skill_id').val(skill_id);
         })
 
         $('#show').on('show.bs.modal', function (event) {

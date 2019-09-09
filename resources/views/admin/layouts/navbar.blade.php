@@ -52,7 +52,7 @@
                     <span> Projects</span></a></li>
             <li><a href="/admin/departments"><i class="fa fa-list-alt" aria-hidden="true"></i>
                     <span> Departments</span></a></li>
-            <li><a href="/admin/tags"><i class="fa fa-file" aria-hidden="true"></i>
+            <li><a href="/admin/skills"><i class="fa fa-file" aria-hidden="true"></i>
                     <span> Skills</span></a></li>
         </ul>
     </section>

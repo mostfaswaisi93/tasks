@@ -29,7 +29,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('departments', 'DepartmentController');
     Route::resource('tasks', 'TaskController');
     Route::resource('projects', 'ProjectController');
-    Route::resource('tags', 'TagController');
+    Route::resource('skills', 'SkillController');
 });
 
 Auth::routes();

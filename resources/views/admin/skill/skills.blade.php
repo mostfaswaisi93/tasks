@@ -18,14 +18,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tags as $item)
+                    @foreach ($skills as $item)
                     <tr>
                         <td>{{$item->name}}</td>
                         <td>
-                            <button class="btn btn-primary" data-myname="{{$item->name}}" data-tagid="{{$item->id}}"
+                            <button class="btn btn-primary" data-myname="{{$item->name}}" data-skillid="{{$item->id}}"
                                 data-toggle="modal" data-target="#edit"><i class="far fa-edit"></i>
                             </button>
-                            <button class="btn btn-danger" data-tagid={{$item->id}} data-toggle="modal"
+                            <button class="btn btn-danger" data-skillid={{$item->id}} data-toggle="modal"
                                 data-target="#delete"> <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                         </td>
@@ -34,7 +34,7 @@
                 </tbody>
             </table>
             <div class="text-center">
-                {{$tags->render()}}
+                {{$skills->render()}}
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
                 <h4 class="modal-title" id="addModalLabel">Add Skill</h4>
             </div>
             @include('admin._errors')
-            <form method="POST" action="{{ action('TagController@store')}}" accept-charset="UTF-8"
+            <form method="POST" action="{{ action('SkillController@store')}}" accept-charset="UTF-8"
                 class="form-horizontal" role="form">
                 @csrf
                 <div class="modal-body">
@@ -87,12 +87,12 @@
                 <h4 class="modal-title" id="editModalLabel">Edit Skill</h4>
             </div>
             @include('admin._errors')
-            <form method="POST" action="{{route('tags.update','test')}}" accept-charset="UTF-8" class="form-horizontal"
-                role="form">
+            <form method="POST" action="{{route('skills.update','test')}}" accept-charset="UTF-8"
+                class="form-horizontal" role="form">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
-                    <input type="hidden" name="tag_id" id="tag_id" value="">
+                    <input type="hidden" name="skill_id" id="skill_id" value="">
                     <div class="form-group">
                         <label for="name" class="col-md-2 control-label">Name</label>
                         <div class="col-md-9">
@@ -125,14 +125,14 @@
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
             </div>
-            <form action="{{route('tags.destroy','test')}}" method="post">
+            <form action="{{route('skills.destroy','test')}}" method="post">
                 @csrf
                 @method('delete')
                 <div class="modal-body">
                     <p class="text-center">
                         Are you sure you want to delete this?
                     </p>
-                    <input type="hidden" name="tag_id" id="tag_id" value="">
+                    <input type="hidden" name="skill_id" id="skill_id" value="">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>

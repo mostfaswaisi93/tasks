@@ -22,9 +22,9 @@ class Employee extends Model
         return $this->belongsTo('App\Department');
     }
 
-    public function tags()
+    public function skills()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->belongsToMany('App\Skill');
     }
 
     public function user()
