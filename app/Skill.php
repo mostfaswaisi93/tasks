@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Skill extends Model
 {
-    // protected $guarded = [];
     protected $fillable = [
         'name'
     ];
@@ -15,5 +14,4 @@ class Skill extends Model
     {
         return $this->belongsToMany('App\Employee');
     }
-
 }

@@ -10,7 +10,8 @@ class Project extends Model
         'title', 'description', 'department_id', 'status'
     ];
 
-    public function department(){
+    public function department()
+    {
         return $this->belongsTo('App\Department');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Department;
 use App\Project;
 use Illuminate\Http\Request;
+use DataTables;
 
 class ProjectController extends Controller
 {
@@ -12,110 +13,102 @@ class ProjectController extends Controller
     {
         $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        return view('admin.project.projects')
-            ->with('projects', Project::paginate(3))
-            ->with('departments', Department::get(['id', 'name']));
-            // ->with('project', Project::get());
+        $projects = Project::get();
+        if ($request->ajax()) {
+            $data = Project::latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProject"><i class="far fa-edit"></i></a>';
+
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProject"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.project.projects')->with('projects', $projects);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+
         $request->validate([
-            'title' => 'required',
-            'description' => 'required'
+            'name' => 'required|max:255'
         ]);
 
-        $project = new Project();
+        Project::updateOrCreate(
+            ['id' => $request->project_id],
+            ['name' => $request->name]
+        );
 
-        $project->title = $request->title;
-        $project->description = $request->description;
-        $project->department_id = $request->department_id;
-        // $project->status =  $request->status;
-        $project->save();
-
-        return redirect('admin/projects');
+        return response()->json(['success' => 'Project saved successfully.']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Project $project)
+    public function edit($id)
     {
-        //
+        $project = Project::find($id);
+        return response()->json($project);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Project $project)
+    public function destroy($id)
     {
-        //
+        Project::find($id)->delete();
+
+        return response()->json(['success' => 'Project deleted successfully.']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Project  $project
-     * @return \Illuminate\Http\Response
-     */
 
-    public function update(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required'
-        ]);
 
-        // dd($request->all());
-        $project = Project::findOrFail($request->project_id);
-        $project->update($request->all());
+    // public function index()
+    // {
+    //     return view('admin.project.projects')
+    //         ->with('projects', Project::paginate(3))
+    //         ->with('departments', Department::get(['id', 'name']));
+    // }
 
-        return redirect('admin/projects');
-    }
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required',
+    //         'description' => 'required'
+    //     ]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Project  $project
-     * @return \Illuminate\Http\Response
-     */
+    //     $project = new Project();
 
-    public function destroy(Request $request)
-    {
-        $project = Project::findOrFail($request->project_id);
-        $project->delete();
-        return back();
-    }
+    //     $project->title = $request->title;
+    //     $project->description = $request->description;
+    //     $project->department_id = $request->department_id;
+    //     $project->save();
+
+    //     return redirect('admin/projects');
+    // }
+
+    // public function update(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required',
+    //         'description' => 'required'
+    //     ]);
+
+    //     // dd($request->all());
+    //     $project = Project::findOrFail($request->project_id);
+    //     $project->update($request->all());
+
+    //     return redirect('admin/projects');
+    // }
+
+    // public function destroy(Request $request)
+    // {
+    //     $project = Project::findOrFail($request->project_id);
+    //     $project->delete();
+    //     return back();
+    // }
 
     public function pending($id)
     {

@@ -6,6 +6,29 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">All Tasks</h3>
+            <button type="button" class="btn btn-success pull-right" href="javascript:void(0)" id="createNewTask"><i
+                    class="fa fa-plus" aria-hidden="true"></i> Create New Task</button>
+        </div>
+        <div class="box-body">
+            <table class="table table-responsive data-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th width="280px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">All Tasks</h3>
             <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#addModal"><i
                     class="fa fa-plus" aria-hidden="true"></i> Add New</button>
         </div>
@@ -71,11 +94,9 @@
                     @endforeach
                 </tbody>
             </table>
-            {{-- <div class="text-center">
-                {{$tasks->render()}}
-        </div> --}}
+
+        </div>
     </div>
-</div>
 </div>
 
 
@@ -112,18 +133,18 @@
                         </div>
                     </div>
                     <div class="form-group">
-                            <label for="employee_id" class="col-md-2 control-label">Employee</label>
-                            <div class="col-md-9">
-                                <select class="form-control" name="employee_id[]" multiple>
-                                    @foreach ($employees as $employee)
-                                    <option value="{{$employee->id}}">{{$employee->full_name}}</option>
-                                    @endforeach
-                                </select>
-                                <span class="help-block">
-                                    <strong></strong>
-                                </span>
-                            </div>
+                        <label for="employee_id" class="col-md-2 control-label">Employee</label>
+                        <div class="col-md-9">
+                            <select class="form-control" name="employee_id[]" multiple>
+                                @foreach ($employees as $employee)
+                                <option value="{{$employee->id}}">{{$employee->full_name}}</option>
+                                @endforeach
+                            </select>
+                            <span class="help-block">
+                                <strong></strong>
+                            </span>
                         </div>
+                    </div>
                     <div class="form-group">
                         <label for="project_id" class="col-md-2 control-label">Project</label>
                         <div class="col-md-9">
@@ -188,149 +209,155 @@
                 <h4 class="modal-title" id="editModalLabel">Edit Task</h4>
             </div>
             @include('admin._errors')
-            <form method="POST" action="{{route('tasks.update','test')}}" accept-charset="UTF-8" class="form-horizontal"
-                role="form">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <input type="hidden" name="task_id" id="task_id" value="">
-                    <div class="form-group">
-                        <label for="full_name" class="col-md-2 control-label">Full Name</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="full_name" type="text"
-                                id="full_name" />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="col-md-2 control-label">Email</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="email" type="text" id="email" />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone" class="col-md-2 control-label">Phone</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="phone" type="text" id="phone" />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="address" class="col-md-2 control-label">Address</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="address" type="text" id="address" />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="job_title" class="col-md-2 control-label">Job Title</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="job_title" type="text"
-                                id="job_title" />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                        Close</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                        Update</button>
-                </div>
-            </form>
+            <form method="POST" action="{{route('tasks.update','test')}}" accept-charset="UTF-8"
+class="form-horizontal"
+role="form">
+@csrf
+@method('PUT')
+<div class="modal-body">
+    <input type="hidden" name="task_id" id="task_id" value="">
+    <div class="form-group">
+        <label for="full_name" class="col-md-2 control-label">Full Name</label>
+        <div class="col-md-9">
+            <input class="form-control" autofocus="autofocus" name="full_name" type="text" id="full_name" />
+            <span class="help-block">
+                <strong></strong>
+            </span>
         </div>
     </div>
+    <div class="form-group">
+        <label for="email" class="col-md-2 control-label">Email</label>
+        <div class="col-md-9">
+            <input class="form-control" autofocus="autofocus" name="email" type="text" id="email" />
+            <span class="help-block">
+                <strong></strong>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="phone" class="col-md-2 control-label">Phone</label>
+        <div class="col-md-9">
+            <input class="form-control" autofocus="autofocus" name="phone" type="text" id="phone" />
+            <span class="help-block">
+                <strong></strong>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="address" class="col-md-2 control-label">Address</label>
+        <div class="col-md-9">
+            <input class="form-control" autofocus="autofocus" name="address" type="text" id="address" />
+            <span class="help-block">
+                <strong></strong>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="job_title" class="col-md-2 control-label">Job Title</label>
+        <div class="col-md-9">
+            <input class="form-control" autofocus="autofocus" name="job_title" type="text" id="job_title" />
+            <span class="help-block">
+                <strong></strong>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">
+        <i class="fa fa-times" aria-hidden="true"></i>
+        Close</button>
+    <button type="submit" class="btn btn-primary">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        Update</button>
+</div>
+</form>
+</div>
+</div>
 </div> --}}
 
-<!-- Show Modal -->
-{{-- <div class="modal fade" id="show" tabindex="-1" role="dialog" aria-labelledby="showModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="showModalLabel">Show Task</h4>
-            </div>
-            @include('admin._errors')
-            <form method="POST" action="" accept-charset="UTF-8" class="form-horizontal" role="form">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <input type="hidden" name="task_id" id="task_id" value="">
-                    <div class="form-group">
-                        <label for="title" class="col-md-2 control-label">Title</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="title" type="text" id="title"
-                                disabled />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="department_id" class="col-md-2 control-label">Department</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="department_id" type="text"
-                                id="department_id" disabled />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="description" class="col-md-2 control-label">Description</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control" name="description" cols="50" rows="10" id="description"
-                                disabled></textarea>
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> --}}
-
-<!-- Delete Modal -->
-{{-- <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
-            </div>
-            <form action="{{route('tasks.destroy','test')}}" method="post">
-                @csrf
-                @method('delete')
-                <div class="modal-body">
-                    <p class="text-center">
-                        Are you sure you want to delete this?
-                    </p>
-                    <input type="hidden" name="task_id" id="task_id" value="">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
-                    <button type="submit" class="btn btn-warning">Yes, Delete</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> --}}
+@include('admin.task.form')
 
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    $(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+
+    var table = $('.data-table').DataTable({
+        processing: true,
+        // paging : false,
+        serverSide: true,
+        ajax: "{{ route('tasks.index') }}",
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'name', name: 'name'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+
+    $('#createNewTask').click(function () {
+        $('#saveBtn').val("create-task");
+        $('#task_id').val('');
+        $('#taskForm').trigger("reset");
+        $('#modalHeading').html("Create New Task");
+        $('#taskModal').modal('show');
+    });
+
+    $('body').on('click', '.editTask', function () {
+      var task_id = $(this).data('id');
+      $.get("{{ route('tasks.index') }}" +'/' + task_id +'/edit', function (data) {
+          $('#modalHeading').html("Edit Task");
+          $('#saveBtn').val("edit-user");
+          $('#taskModal').modal('show');
+          $('#task_id').val(data.id);
+          $('#name').val(data.name);
+      })
+   });
+
+    $('#saveBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Sending..');
+
+        $.ajax({
+          data: $('#taskForm').serialize(),
+          url: "{{ route('tasks.store') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+
+              $('#taskForm').trigger("reset");
+              $('#taskModal').modal('hide');
+              table.draw();
+
+          },
+          error: function (data) {
+              console.log('Error:', data);
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+
+    $('body').on('click', '.deleteTask', function () {
+
+        var task_id = $(this).data("id");
+        confirm("Are You sure want to delete !");
+
+        $.ajax({
+            type: "DELETE",
+            url: "{{ route('tasks.store') }}"+'/'+task_id,
+            success: function (data) {
+                table.draw();
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
+    });
+  });
+</script>
+@endpush

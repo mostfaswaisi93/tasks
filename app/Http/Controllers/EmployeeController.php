@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\Employee;
-use App\Tag;
+use App\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use DataTables;
 
 class EmployeeController extends Controller
 {
@@ -14,121 +15,113 @@ class EmployeeController extends Controller
     {
         $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        return view('admin.employee.employees')
-            ->with('employees', Employee::paginate(3))
-            ->with('departments', Department::get(['id', 'name']))
-            ->with('tags', Tag::get(['id', 'name']));
+        $employees = Employee::get();
+        if ($request->ajax()) {
+            $data = Employee::latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editEmployee"><i class="far fa-edit"></i></a>';
+
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteEmployee"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.employee.employees')->with('employees', $employees);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+
         $request->validate([
-            'full_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
-            'job_title' => 'required',
+            'name' => 'required|max:255'
         ]);
 
-        $employee = new Employee();
-        $employee->full_name = $request->full_name;
-        $employee->email = $request->email;
-        $employee->phone = $request->phone;
-        $employee->address = $request->address;
-        $employee->job_title = $request->job_title;
-        $employee->department_id = $request->department_id;
-        $employee->user_id = Auth::id();
-        $employee->save();
-        $employee->tags()->attach($request->tag_id);
+        Employee::updateOrCreate(
+            ['id' => $request->employee_id],
+            ['name' => $request->name]
+        );
 
-        return redirect('admin/employees');
+        return response()->json(['success' => 'Employee saved successfully.']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Employee $employee)
+    public function edit($id)
     {
-        //
+        $employee = Employee::find($id);
+        return response()->json($employee);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Employee $employee)
+    public function destroy($id)
     {
-        //
+        Employee::find($id)->delete();
+
+        return response()->json(['success' => 'Employee deleted successfully.']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
+    // public function index()
+    // {
+    //     return view('admin.employee.employees')
+    //         ->with('employees', Employee::paginate(3))
+    //         ->with('departments', Department::get(['id', 'name']))
+    //         ->with('skills', Skill::get(['id', 'name']));
+    // }
 
-    public function update(Request $request)
-    {
-        $request->validate([
-            'full_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
-            'job_title' => 'required',
-        ]);
-        dd($request->all());
-        $employee = Employee::findOrFail($request->employee_id);
-        $employee->update($request->all());
-        $employee->tags()->sync($request->tag_id);
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'full_name' => 'required',
+    //         'email' => 'required',
+    //         'phone' => 'required',
+    //         'address' => 'required',
+    //         'job_title' => 'required',
+    //     ]);
 
-        return redirect('admin/employees');
-    }
+    //     $employee = new Employee();
+    //     $employee->full_name = $request->full_name;
+    //     $employee->email = $request->email;
+    //     $employee->phone = $request->phone;
+    //     $employee->address = $request->address;
+    //     $employee->job_title = $request->job_title;
+    //     $employee->department_id = $request->department_id;
+    //     $employee->user_id = Auth::id();
+    //     $employee->save();
+    //     $employee->skills()->attach($request->skill_id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
+    //     return redirect('admin/employees');
+    // }
 
-    public function destroy(Request $request)
-    {
-        $employee = Employee::findOrFail($request->employee_id);
-        $employee->delete();
-        $employee->tags()->detach();
+    // public function update(Request $request)
+    // {
+    //     $request->validate([
+    //         'full_name' => 'required',
+    //         'email' => 'required',
+    //         'phone' => 'required',
+    //         'address' => 'required',
+    //         'job_title' => 'required',
+    //     ]);
+    //     dd($request->all());
+    //     $employee = Employee::findOrFail($request->employee_id);
+    //     $employee->update($request->all());
+    //     $employee->skills()->sync($request->skill_id);
 
-        return back();
-    }
+    //     return redirect('admin/employees');
+    // }
+
+    // public function destroy(Request $request)
+    // {
+    //     $employee = Employee::findOrFail($request->employee_id);
+    //     $employee->delete();
+    //     $employee->skills()->detach();
+
+    //     return back();
+    // }
 
     public function pending($id)
     {

@@ -10,11 +10,13 @@ class Department extends Model
         'name', 'description'
     ];
 
-    public function employees(){
+    public function employees()
+    {
         return $this->hasMany('App\Employee');
     }
 
-    public function projects(){
+    public function projects()
+    {
         return $this->hasMany('App\Project');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use Illuminate\Http\Request;
+use DataTables;
 
 class DepartmentController extends Controller
 {
@@ -11,102 +12,65 @@ class DepartmentController extends Controller
     {
         $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        return view('admin.department.departments')->with('departments', Department::paginate(3));
+        $departments = Department::get();
+        if ($request->ajax()) {
+            $data = Department::latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDepartment"><i class="far fa-edit"></i></a>';
+
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDepartment"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.department.departments')->with('departments', $departments);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'description' => 'required'
-        ]);
+        Department::updateOrCreate(
+            ['id' => $request->department_id],
+            ['name' => $request->name],
+            ['description' => $request->description]
+        );
 
-        $department = new Department();
-        $department->name = $request->name;
-        $department->description = $request->description;
-        $department->save();
-
-        return redirect('admin/departments');
+        return response()->json(['success' => 'Department saved successfully.']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Department  $department
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Department $department)
+    public function edit($id)
     {
-        //
+        $department = Department::find($id);
+        return response()->json($department);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Department  $department
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Department $department)
+    public function destroy($id)
     {
-        return view('admin.department.editDepartment')->with('department', $department);
+        Department::find($id)->delete();
+
+        return response()->json(['success' => 'Department deleted successfully.']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Department  $department
-     * @return \Illuminate\Http\Response
-     */
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'description' => 'required'
+    //     ]);
 
-    public function update(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'description' => 'required'
-        ]);
+    //     $department = new Department();
+    //     $department->name = $request->name;
+    //     $department->description = $request->description;
+    //     $department->save();
 
-        // dd($request->all());
-        $department = Department::findOrFail($request->dep_id);
-        $department->update($request->all());
+    //     return redirect('admin/departments');
+    // }
 
-        return redirect('admin/departments');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Department  $department
-     * @return \Illuminate\Http\Response
-     */
-
-    public function destroy(Request $request)
-    {
-        $department = Department::findOrFail($request->dep_id);
-        $department->delete();
-        return back();
-    }
 }

@@ -6,6 +6,29 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">All Employees</h3>
+            <button type="button" class="btn btn-success pull-right" href="javascript:void(0)" id="createNewEmployee"><i
+                    class="fa fa-plus" aria-hidden="true"></i> Create New Employee</button>
+        </div>
+        <div class="box-body">
+            <table class="table table-responsive data-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th width="280px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">All Employees</h3>
             <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#addModal"><i
                     class="fa fa-plus" aria-hidden="true"></i> Add New</button>
         </div>
@@ -48,9 +71,9 @@
                             <button class="btn btn-primary" data-myfull_name="{{$item->full_name}}"
                                 data-myemail="{{$item->email}}" data-employeeid="{{$item->id}}"
                                 data-myphone="{{$item->phone}}" data-myaddress="{{$item->address}}"
-                                data-myjob_title="{{$item->job_title}}" data-mytag="{{$item->tag_id}}"
-                                data-mydepartment="{{$item->department_id}}" data-toggle="modal"
-                                data-target="#edit"><i class="far fa-edit"></i>
+                                data-myjob_title="{{$item->job_title}}" data-myskill="{{$item->skill_id}}"
+                                data-mydepartment="{{$item->department_id}}" data-toggle="modal" data-target="#edit"><i
+                                    class="far fa-edit"></i>
                             </button>
                             <button class="btn btn-danger" data-employeeid={{$item->id}} data-toggle="modal"
                                 data-target="#delete"> <i class="fa fa-trash" aria-hidden="true"></i>
@@ -140,11 +163,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tag_id" class="col-md-2 control-label">Skills</label>
+                        <label for="skill_id" class="col-md-2 control-label">Skills</label>
                         <div class="col-md-9">
-                            <select class="form-control" id="tag_id" name="tag_id[]" multiple>
-                                @foreach ($tags as $tag)
-                                <option value="{{$tag->id}}">{{$tag->name}}</option>
+                            <select class="form-control" id="skill_id" name="skill_id[]" multiple>
+                                @foreach ($skills as $skill)
+                                <option value="{{$skill->id}}">{{$skill->name}}</option>
                                 @endforeach
                             </select>
                             <span class="help-block">
@@ -247,16 +270,16 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tag_id" class="col-md-2 control-label">Skills</label>
+                        <label for="skill_id" class="col-md-2 control-label">Skills</label>
                         <div class="col-md-9">
-                            <select class="form-control" id="tag_id" name="tag_id[]" multiple>
-                                {{-- @foreach ($tags as $tag)
-                                <option value="{{$tag->id}}" @foreach ($employee->tags as $tagEmp)
-                                {{$tagEmp->id == $tag->id ? "selected" : ""}}
-                                @endforeach>{{$tag->name}}</option>
+                            <select class="form-control" id="skill_id" name="skill_id[]" multiple>
+                                {{-- @foreach ($skills as $skill)
+                                <option value="{{$skill->id}}" @foreach ($employee->skills as $skillEmp)
+                                {{$skillEmp->id == $skill->id ? "selected" : ""}}
+                                @endforeach>{{$skill->name}}</option>
                                 @endforeach --}}
-                                @foreach ($tags as $tag)
-                                <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                @foreach ($skills as $skill)
+                                <option value="{{$skill->id}}">{{$skill->name}}</option>
                                 @endforeach
                             </select>
                             <span class="help-block">
@@ -278,82 +301,89 @@
     </div>
 </div>
 
-<!-- Show Modal -->
-{{-- <div class="modal fade" id="show" tabindex="-1" role="dialog" aria-labelledby="showModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="showModalLabel">Show Employee</h4>
-            </div>
-            @include('admin._errors')
-            <form method="POST" action="" accept-charset="UTF-8" class="form-horizontal" role="form">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <input type="hidden" name="employee_id" id="employee_id" value="">
-                    <div class="form-group">
-                        <label for="title" class="col-md-2 control-label">Title</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="title" type="text" id="title"
-                                disabled />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="department_id" class="col-md-2 control-label">Department</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="department_id" type="text"
-                                id="department_id" disabled />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="description" class="col-md-2 control-label">Description</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control" name="description" cols="50" rows="10" id="description"
-                                disabled></textarea>
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> --}}
-
-<!-- Delete Modal -->
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
-            </div>
-            <form action="{{route('employees.destroy','test')}}" method="post">
-                @csrf
-                @method('delete')
-                <div class="modal-body">
-                    <p class="text-center">
-                        Are you sure you want to delete this?
-                    </p>
-                    <input type="hidden" name="employee_id" id="employee_id" value="">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
-                    <button type="submit" class="btn btn-warning">Yes, Delete</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+@include('admin.employee.form')
 
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    $(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+
+    var table = $('.data-table').DataTable({
+        processing: true,
+        // paging : false,
+        serverSide: true,
+        ajax: "{{ route('employees.index') }}",
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'name', name: 'name'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+
+    $('#createNewEmployee').click(function () {
+        $('#saveBtn').val("create-employee");
+        $('#employee_id').val('');
+        $('#employeeForm').trigger("reset");
+        $('#modalHeading').html("Create New Employee");
+        $('#employeeModal').modal('show');
+    });
+
+    $('body').on('click', '.editEmployee', function () {
+      var employee_id = $(this).data('id');
+      $.get("{{ route('employees.index') }}" +'/' + employee_id +'/edit', function (data) {
+          $('#modalHeading').html("Edit Employee");
+          $('#saveBtn').val("edit-user");
+          $('#employeeModal').modal('show');
+          $('#employee_id').val(data.id);
+          $('#name').val(data.name);
+      })
+   });
+
+    $('#saveBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Sending..');
+
+        $.ajax({
+          data: $('#employeeForm').serialize(),
+          url: "{{ route('employees.store') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+
+              $('#employeeForm').trigger("reset");
+              $('#employeeModal').modal('hide');
+              table.draw();
+
+          },
+          error: function (data) {
+              console.log('Error:', data);
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+
+    $('body').on('click', '.deleteEmployee', function () {
+
+        var employee_id = $(this).data("id");
+        confirm("Are You sure want to delete !");
+
+        $.ajax({
+            type: "DELETE",
+            url: "{{ route('employees.store') }}"+'/'+employee_id,
+            success: function (data) {
+                table.draw();
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
+    });
+  });
+</script>
+@endpush

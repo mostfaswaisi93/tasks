@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Skill;
 use Illuminate\Http\Request;
+use DataTables;
 
 class SkillController extends Controller
 {
@@ -11,84 +12,53 @@ class SkillController extends Controller
     {
         $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        return view('admin.skill.skills')->with('skills', Skill::paginate(3));
+        $skills = Skill::get();
+        if ($request->ajax()) {
+            $data = Skill::latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editSkill"><i class="far fa-edit"></i></a>';
+
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteSkill"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.skill.skills')->with('skills', $skills);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255'
         ]);
 
-        $skill = new Skill();
-        $skill->name = $request->name;
-        $skill->save();
+        Skill::updateOrCreate(
+            ['id' => $request->skill_id],
+            ['name' => $request->name]
+        );
 
-        return redirect('admin/skills');
+        return response()->json(['success' => 'Skill saved successfully.']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Skill  $skill
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Skill $skill)
+    public function edit($id)
     {
-        //
+        $skill = Skill::find($id);
+        return response()->json($skill);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Skill  $skill
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Skill $skill)
+    public function destroy($id)
     {
-        //
-    }
+        Skill::find($id)->delete();
 
-    public function update(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-        ]);
-
-        // dd($request->all());
-        $skill = Skill::findOrFail($request->skill_id);
-        $skill->update($request->all());
-
-        return redirect('admin/skills');
-    }
-
-    public function destroy(Request $request)
-    {
-        $skill = Skill::findOrFail($request->skill_id);
-        $skill->delete();
-        return back();
+        return response()->json(['success' => 'Skill deleted successfully.']);
     }
 }

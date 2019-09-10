@@ -6,141 +6,108 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">All Skills</h3>
-            <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#addModal"><i
-                    class="fa fa-plus" aria-hidden="true"></i> Add New</button>
+            <button type="button" class="btn btn-success pull-right" href="javascript:void(0)" id="createNewSkill"><i
+                    class="fa fa-plus" aria-hidden="true"></i> Create New Skill</button>
         </div>
         <div class="box-body">
-            <table id="datatable" class="table table-responsive">
+            <table class="table table-responsive data-table">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Name</th>
-                        <th>Action</th>
+                        <th width="280px">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($skills as $item)
-                    <tr>
-                        <td>{{$item->name}}</td>
-                        <td>
-                            <button class="btn btn-primary" data-myname="{{$item->name}}" data-skillid="{{$item->id}}"
-                                data-toggle="modal" data-target="#edit"><i class="far fa-edit"></i>
-                            </button>
-                            <button class="btn btn-danger" data-skillid={{$item->id}} data-toggle="modal"
-                                data-target="#delete"> <i class="fa fa-trash" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    @endforeach
                 </tbody>
             </table>
-            <div class="text-center">
-                {{$skills->render()}}
-            </div>
         </div>
     </div>
 </div>
 
-<!-- Add Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="addModalLabel">Add Skill</h4>
-            </div>
-            @include('admin._errors')
-            <form method="POST" action="{{ action('SkillController@store')}}" accept-charset="UTF-8"
-                class="form-horizontal" role="form">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name" class="col-md-2 control-label">Name</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="name" type="text" />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                        Close</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                        Add</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Edit Modal -->
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editModalLabel">Edit Skill</h4>
-            </div>
-            @include('admin._errors')
-            <form method="POST" action="{{route('skills.update','test')}}" accept-charset="UTF-8"
-                class="form-horizontal" role="form">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <input type="hidden" name="skill_id" id="skill_id" value="">
-                    <div class="form-group">
-                        <label for="name" class="col-md-2 control-label">Name</label>
-                        <div class="col-md-9">
-                            <input class="form-control" autofocus="autofocus" name="name" type="text" id="name" />
-                            <span class="help-block">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                        Close</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                        Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Modal -->
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-            </div>
-            <form action="{{route('skills.destroy','test')}}" method="post">
-                @csrf
-                @method('delete')
-                <div class="modal-body">
-                    <p class="text-center">
-                        Are you sure you want to delete this?
-                    </p>
-                    <input type="hidden" name="skill_id" id="skill_id" value="">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
-                    <button type="submit" class="btn btn-warning">Yes, Delete</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+@include('admin.skill.form')
 
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    $(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+
+    var table = $('.data-table').DataTable({
+        processing: true,
+        // paging : false,
+        serverSide: true,
+        ajax: "{{ route('skills.index') }}",
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'name', name: 'name'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+
+    $('#createNewSkill').click(function () {
+        $('#saveBtn').val("create-skill");
+        $('#skill_id').val('');
+        $('#skillForm').trigger("reset");
+        $('#modalHeading').html("Create New Skill");
+        $('#skillModal').modal('show');
+    });
+
+    $('body').on('click', '.editSkill', function () {
+      var skill_id = $(this).data('id');
+      $.get("{{ route('skills.index') }}" +'/' + skill_id +'/edit', function (data) {
+          $('#modalHeading').html("Edit Skill");
+          $('#saveBtn').val("edit-user");
+          $('#skillModal').modal('show');
+          $('#skill_id').val(data.id);
+          $('#name').val(data.name);
+      })
+   });
+
+    $('#saveBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Sending..');
+
+        $.ajax({
+          data: $('#skillForm').serialize(),
+          url: "{{ route('skills.store') }}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+
+              $('#skillForm').trigger("reset");
+              $('#skillModal').modal('hide');
+              table.draw();
+
+          },
+          error: function (data) {
+              console.log('Error:', data);
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
+
+    $('body').on('click', '.deleteSkill', function () {
+
+        var skill_id = $(this).data("id");
+        confirm("Are You sure want to delete !");
+
+        $.ajax({
+            type: "DELETE",
+            url: "{{ route('skills.store') }}"+'/'+skill_id,
+            success: function (data) {
+                table.draw();
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
+    });
+  });
+</script>
+@endpush
