@@ -1,4 +1,4 @@
-<!-- Modal -->
+<!-- Project Modal -->
 
 <div class="modal fade" id="projectModal" aria-hidden="true">
     <div class="modal-dialog">
@@ -59,6 +59,30 @@
     </div>
 </div>
 
+<!-- Confirm Delete -->
+
+<div class="modal fade" id="confirmModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <h4 style="margin: 0;" class="text-center">Are you sure you want to remove this data?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    Close</button>
+                <button type="button" class="btn btn-danger" name="ok_button" id="ok_button">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {{-- <div class="form-group">
     <label for="department_id" class="col-md-2 control-label">Department</label>

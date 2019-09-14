@@ -6,6 +6,7 @@ use App\Department;
 use App\Project;
 use Illuminate\Http\Request;
 use DataTables;
+use Validator;
 
 class ProjectController extends Controller
 {
@@ -32,20 +33,33 @@ class ProjectController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('admin.project.projects')->with('projects', $projects);
+        return view('admin.project.projects')->with('projects', $projects)
+            ->with('departments', Department::get(['id', 'name']));
     }
 
     public function store(Request $request)
     {
 
-        $request->validate([
-            'name' => 'required|max:255'
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
 
         Project::updateOrCreate(
             ['id' => $request->project_id],
             ['name' => $request->name]
         );
+
+        //     $project = new Project();
+
+        //     $project->title = $request->title;
+        //     $project->description = $request->description;
+        //     $project->department_id = $request->department_id;
+        //     $project->save();
 
         return response()->json(['success' => 'Project saved successfully.']);
     }
@@ -62,53 +76,6 @@ class ProjectController extends Controller
 
         return response()->json(['success' => 'Project deleted successfully.']);
     }
-
-
-
-    // public function index()
-    // {
-    //     return view('admin.project.projects')
-    //         ->with('projects', Project::paginate(3))
-    //         ->with('departments', Department::get(['id', 'name']));
-    // }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required',
-    //         'description' => 'required'
-    //     ]);
-
-    //     $project = new Project();
-
-    //     $project->title = $request->title;
-    //     $project->description = $request->description;
-    //     $project->department_id = $request->department_id;
-    //     $project->save();
-
-    //     return redirect('admin/projects');
-    // }
-
-    // public function update(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required',
-    //         'description' => 'required'
-    //     ]);
-
-    //     // dd($request->all());
-    //     $project = Project::findOrFail($request->project_id);
-    //     $project->update($request->all());
-
-    //     return redirect('admin/projects');
-    // }
-
-    // public function destroy(Request $request)
-    // {
-    //     $project = Project::findOrFail($request->project_id);
-    //     $project->delete();
-    //     return back();
-    // }
 
     public function pending($id)
     {

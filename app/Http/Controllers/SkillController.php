@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Skill;
 use Illuminate\Http\Request;
 use DataTables;
+use Validator;
 
 class SkillController extends Controller
 {
@@ -37,9 +38,13 @@ class SkillController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
-            'name' => 'required|max:255'
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
 
         Skill::updateOrCreate(
             ['id' => $request->skill_id],

@@ -40,7 +40,6 @@
 
     var table = $('.data-table').DataTable({
         processing: true,
-        // paging : false,
         serverSide: true,
         ajax: "{{ route('skills.index') }}",
         columns: [
@@ -69,7 +68,7 @@
       })
    });
 
-    $('#saveBtn').click(function (e) {
+    $('#saveBtn').on('click', function (e) {
         e.preventDefault();
         $(this).html('Sending..');
 
@@ -79,35 +78,40 @@
           type: "POST",
           dataType: 'json',
           success: function (data) {
-
               $('#skillForm').trigger("reset");
               $('#skillModal').modal('hide');
               table.draw();
-
+              $('#saveBtn').html('<i class="fas fa-save"></i> Save Changes');
           },
           error: function (data) {
               console.log('Error:', data);
-              $('#saveBtn').html('Save Changes');
+              $('#saveBtn').html('<i class="fas fa-save"></i> Save Changes');
           }
       });
     });
 
     $('body').on('click', '.deleteSkill', function () {
-
         var skill_id = $(this).data("id");
-        confirm("Are You sure want to delete !");
-
-        $.ajax({
-            type: "DELETE",
-            url: "{{ route('skills.store') }}"+'/'+skill_id,
-            success: function (data) {
-                table.draw();
-            },
-            error: function (data) {
-                console.log('Error:', data);
-            }
+        $('#confirmModal').modal('show');
+        $('#ok_button').on('click', function(){
+            $.ajax({
+                url: "{{ route('skills.store') }}"+'/'+skill_id,
+                type: "DELETE",
+                beforeSend:function(){
+                    $('#ok_button').text('Deleting...');
+                },
+                success: function (data) {
+                    $('#confirmModal').modal('hide');
+                    table.draw();
+                    $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                },
+                error: function (data) {
+                    console.log('error:', data);
+                    $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                }
+            });
         });
     });
-  });
+});
 </script>
 @endpush

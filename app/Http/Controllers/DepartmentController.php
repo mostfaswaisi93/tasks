@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Department;
 use Illuminate\Http\Request;
 use DataTables;
+use Validator;
 
 class DepartmentController extends Controller
 {
@@ -36,6 +37,21 @@ class DepartmentController extends Controller
 
     public function store(Request $request)
     {
+
+        // $request->validate([
+        //         'name' => 'required',
+        //         'description' => 'required'
+        //     ]);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'description' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
+
         Department::updateOrCreate(
             ['id' => $request->department_id],
             ['name' => $request->name],
@@ -57,20 +73,4 @@ class DepartmentController extends Controller
 
         return response()->json(['success' => 'Department deleted successfully.']);
     }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'description' => 'required'
-    //     ]);
-
-    //     $department = new Department();
-    //     $department->name = $request->name;
-    //     $department->description = $request->description;
-    //     $department->save();
-
-    //     return redirect('admin/departments');
-    // }
-
 }
