@@ -6,11 +6,11 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">All Departments</h3>
-            <button type="button" class="btn btn-success pull-right" href="javascript:void(0)"
-                id="createNewDepartment"><i class="fa fa-plus" aria-hidden="true"></i> Create New Department</button>
+            <button type="button" name="create_department" id="create_department" class="btn btn-success pull-right"><i
+                    class="fa fa-plus"></i> Create New Department</button>
         </div>
         <div class="box-body">
-            <table class="table table-responsive data-table">
+            <table class="table table-bordered table-striped" id="data-table">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -19,8 +19,6 @@
                         <th width="280px">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
             </table>
         </div>
     </div>
@@ -31,90 +29,146 @@
 @endsection
 
 @push('scripts')
-<script type="text/javascript">
-    $(function () {
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
 
-    var table = $('.data-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('departments.index') }}",
-        columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'description', name: 'description'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-    });
+<script>
+    $(document).ready(function(){
 
-    $('#createNewDepartment').click(function () {
-        $('#saveBtn').val("create-department");
-        $('#department_id').val('');
-        $('#departmentForm').trigger("reset");
-        $('#modalHeading').html("Create New Department");
-        $('#departmentModal').modal('show');
-    });
+        $('#data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax:{
+            url: "{{ route('departments.index') }}",
+            },
+            columns:[
+                {
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }, searchable: false, orderable: false
+                },
+                {data: 'name', name: 'name'},
+                {data: 'description', name: 'description'},
+                {data: 'action', name: 'action', orderable: false}
+            ]
+        });
 
-    $('body').on('click', '.editDepartment', function () {
-      var department_id = $(this).data('id');
-      $.get("{{ route('departments.index') }}" +'/' + department_id +'/edit', function (data) {
-          $('#modalHeading').html("Edit Department");
-          $('#saveBtn').val("edit-user");
-          $('#departmentModal').modal('show');
-          $('#department_id').val(data.id);
-          $('#name').val(data.name);
-          $('#description').val(data.description);
-      })
-   });
+        $('#create_department').click(function(){
+            $('.modal-title').text("Add New Department");
+                $('#action_button').val("Add");
+                $('#departmentForm').trigger("reset");
+                $('#action').val("Add");
+                $('#departmentModal').modal('show');
+        });
 
-   $('#saveBtn').on('click', function (e) {
-        e.preventDefault();
-        $(this).html('Sending..');
-
-        $.ajax({
-          data: $('#departmentForm').serialize(),
-          url: "{{ route('departments.store') }}",
-          type: "POST",
-          dataType: 'json',
-          success: function (data) {
-              $('#departmentForm').trigger("reset");
-              $('#departmentModal').modal('hide');
-              table.draw();
-              $('#saveBtn').html('<i class="fas fa-save"></i> Save Changes');
-          },
-          error: function (data) {
-              console.log('Error:', data);
-              $('#saveBtn').html('<i class="fas fa-save"></i> Save Changes');
-          }
-      });
-    });
-
-    $('body').on('click', '.deleteDepartment', function () {
-        var department_id = $(this).data("id");
-        $('#confirmModal').modal('show');
-        $('#ok_button').on('click', function(){
+        $('#departmentForm').on('submit', function(event){
+            event.preventDefault();
+            if($('#action').val() == 'Add')
+            {
             $.ajax({
-                url: "{{ route('departments.store') }}"+'/'+department_id,
-                type: "DELETE",
+                url:"{{ route('departments.store') }}",
+                method:"POST",
+                data: new FormData(this),
+                contentType: false,
+                cache:false,
+                processData: false,
+                dataType:"json",
+                success:function(data)
+                {
+                    var html = '';
+                    if(data.errors)
+                {
+                html = '<div class="alert alert-danger">';
+                for(var count = 0; count < data.errors.length; count++)
+                {
+                    html += '<p>' + data.errors[count] + '</p>';
+                }
+                html += '</div>';
+                }
+                if(data.success)
+                {
+                    $('#departmentForm')[0].reset();
+                    $('#data-table').DataTable().ajax.reload();
+                    $('#departmentModal').modal('hide');
+                }
+                    $('#form_result').html(html);
+                }
+            });
+        }
+        if($('#action').val() == "Edit")
+        {
+            $.ajax({
+                url:"{{ route('departments.update') }}",
+                method:"POST",
+                data:new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType:"json",
+                success:function(data)
+                {
+                var html = '';
+                if(data.errors)
+                {
+                html = '<div class="alert alert-danger">';
+                for(var count = 0; count < data.errors.length; count++)
+                {
+                html += '<p>' + data.errors[count] + '</p>';
+                }
+                html += '</div>';
+                }
+                if(data.success)
+                {
+                $('#departmentForm')[0].reset();
+                $('#data-table').DataTable().ajax.reload();
+                $('#departmentModal').modal('hide');
+                }
+                $('#form_result').html(html);
+                }
+                });
+            }
+        });
+
+        $(document).on('click', '.edit', function(){
+            var id = $(this).attr('id');
+            $('#form_result').html('');
+            $.ajax({
+                url:"/admin/departments/"+id+"/edit",
+                dataType:"json",
+                success:function(html){
+                    $('#name').val(html.data.name);
+                    $('#description').val(html.data.description);
+                    $('#hidden_id').val(html.data.id);
+                    $('.modal-title').text("Edit New Department");
+                    $('#action_button').val("Edit");
+                    $('#action').val("Edit");
+                    $('#departmentModal').modal('show');
+                }
+            });
+        });
+
+        var department_id;
+        $(document).on('click', '.delete', function(){
+            department_id = $(this).attr('id');
+            $('#confirmModal').modal('show');
+        });
+
+        $('#ok_button').click(function(){
+            $.ajax({
+                url:"departments/destroy/"+department_id,
                 beforeSend:function(){
                     $('#ok_button').text('Deleting...');
                 },
                 success: function (data) {
-                    $('#confirmModal').modal('hide');
-                    table.draw();
-                    $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
-                },
-                error: function (data) {
-                    console.log('error:', data);
-                    $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                        $('#confirmModal').modal('hide');
+                        $('#data-table').DataTable().ajax.reload();
+                        $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                    },
+                    error: function (data) {
+                        console.log('error:', data);
+                        $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
                 }
             });
         });
     });
-});
 </script>
+
 @endpush

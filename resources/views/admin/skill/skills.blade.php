@@ -6,11 +6,11 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">All Skills</h3>
-            <button type="button" class="btn btn-success pull-right" href="javascript:void(0)" id="createNewSkill"><i
-                    class="fa fa-plus" aria-hidden="true"></i> Create New Skill</button>
+            <button type="button" name="create_skill" id="create_skill" class="btn btn-success pull-right"><i
+                    class="fa fa-plus"></i> Create New Skill</button>
         </div>
         <div class="box-body">
-            <table class="table table-responsive data-table">
+            <table class="table table-bordered table-striped" id="data-table">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -18,8 +18,6 @@
                         <th width="280px">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
             </table>
         </div>
     </div>
@@ -30,88 +28,144 @@
 @endsection
 
 @push('scripts')
-<script type="text/javascript">
-    $(function () {
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
 
-    var table = $('.data-table').DataTable({
+<script>
+    $(document).ready(function(){
+
+    $('#data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('skills.index') }}",
-        columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        ajax:{
+        url: "{{ route('skills.index') }}",
+        },
+        columns:[
+            {
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }, searchable: false, orderable: false
+            },
             {data: 'name', name: 'name'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'action', name: 'action', orderable: false}
         ]
     });
 
-    $('#createNewSkill').click(function () {
-        $('#saveBtn').val("create-skill");
-        $('#skill_id').val('');
-        $('#skillForm').trigger("reset");
-        $('#modalHeading').html("Create New Skill");
-        $('#skillModal').modal('show');
+    $('#create_skill').click(function(){
+        $('.modal-title').text("Add New Skill");
+            $('#action_button').val("Add");
+            $('#skillForm').trigger("reset");
+            $('#action').val("Add");
+            $('#skillModal').modal('show');
     });
 
-    $('body').on('click', '.editSkill', function () {
-      var skill_id = $(this).data('id');
-      $.get("{{ route('skills.index') }}" +'/' + skill_id +'/edit', function (data) {
-          $('#modalHeading').html("Edit Skill");
-          $('#saveBtn').val("edit-user");
-          $('#skillModal').modal('show');
-          $('#skill_id').val(data.id);
-          $('#name').val(data.name);
-      })
-   });
-
-    $('#saveBtn').on('click', function (e) {
-        e.preventDefault();
-        $(this).html('Sending..');
-
+    $('#skillForm').on('submit', function(event){
+        event.preventDefault();
+        if($('#action').val() == 'Add')
+        {
         $.ajax({
-          data: $('#skillForm').serialize(),
-          url: "{{ route('skills.store') }}",
-          type: "POST",
-          dataType: 'json',
-          success: function (data) {
-              $('#skillForm').trigger("reset");
-              $('#skillModal').modal('hide');
-              table.draw();
-              $('#saveBtn').html('<i class="fas fa-save"></i> Save Changes');
-          },
-          error: function (data) {
-              console.log('Error:', data);
-              $('#saveBtn').html('<i class="fas fa-save"></i> Save Changes');
-          }
-      });
+            url:"{{ route('skills.store') }}",
+            method:"POST",
+            data: new FormData(this),
+            contentType: false,
+            cache:false,
+            processData: false,
+            dataType:"json",
+            success:function(data)
+            {
+                var html = '';
+                if(data.errors)
+            {
+            html = '<div class="alert alert-danger">';
+            for(var count = 0; count < data.errors.length; count++)
+            {
+                html += '<p>' + data.errors[count] + '</p>';
+            }
+            html += '</div>';
+            }
+            if(data.success)
+            {
+                $('#skillForm')[0].reset();
+                $('#data-table').DataTable().ajax.reload();
+                $('#skillModal').modal('hide');
+            }
+                $('#form_result').html(html);
+            }
+        });
+    }
+    if($('#action').val() == "Edit")
+    {
+        $.ajax({
+            url:"{{ route('skills.update') }}",
+            method:"POST",
+            data:new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType:"json",
+            success:function(data)
+            {
+            var html = '';
+            if(data.errors)
+            {
+            html = '<div class="alert alert-danger">';
+            for(var count = 0; count < data.errors.length; count++)
+            {
+            html += '<p>' + data.errors[count] + '</p>';
+            }
+            html += '</div>';
+            }
+            if(data.success)
+            {
+            $('#skillForm')[0].reset();
+            $('#data-table').DataTable().ajax.reload();
+            $('#skillModal').modal('hide');
+            }
+            $('#form_result').html(html);
+            }
+            });
+        }
     });
 
-    $('body').on('click', '.deleteSkill', function () {
-        var skill_id = $(this).data("id");
+    $(document).on('click', '.edit', function(){
+        var id = $(this).attr('id');
+        $('#form_result').html('');
+        $.ajax({
+            url:"/admin/skills/"+id+"/edit",
+            dataType:"json",
+            success:function(html){
+                $('#name').val(html.data.name);
+                $('#hidden_id').val(html.data.id);
+                $('.modal-title').text("Edit New Skill");
+                $('#action_button').val("Edit");
+                $('#action').val("Edit");
+                $('#skillModal').modal('show');
+            }
+        });
+    });
+
+    var skill_id;
+    $(document).on('click', '.delete', function(){
+        skill_id = $(this).attr('id');
         $('#confirmModal').modal('show');
-        $('#ok_button').on('click', function(){
-            $.ajax({
-                url: "{{ route('skills.store') }}"+'/'+skill_id,
-                type: "DELETE",
-                beforeSend:function(){
-                    $('#ok_button').text('Deleting...');
-                },
-                success: function (data) {
+    });
+
+    $('#ok_button').click(function(){
+        $.ajax({
+            url:"skills/destroy/"+skill_id,
+            beforeSend:function(){
+                $('#ok_button').text('Deleting...');
+            },
+            success: function (data) {
                     $('#confirmModal').modal('hide');
-                    table.draw();
+                    $('#data-table').DataTable().ajax.reload();
                     $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
                 },
                 error: function (data) {
                     console.log('error:', data);
                     $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
-                }
-            });
+            }
         });
     });
 });
 </script>
+
 @endpush

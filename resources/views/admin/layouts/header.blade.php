@@ -15,28 +15,23 @@
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/bower_components/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/bower_components/Ionicons/css/ionicons.min.css">
-    <!-- DataTables -->
-    {{-- <link rel="stylesheet"
-        href="{{url('/')}}/design/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css"> --}}
     <!-- Theme style -->
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/AdminLTE.min.css">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
+
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/skins/skin-blue.min.css">
     <!-- DataTables -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css">
 
-    <!-- Google Font -->
+  <!-- Bootstrap time Picker -->
+  <link rel="stylesheet" href="{{url('/')}}/design/adminlte/plugins/timepicker/bootstrap-timepicker.min.css">
+  <!-- Google Font -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
-    {{-- <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" /> --}}
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>

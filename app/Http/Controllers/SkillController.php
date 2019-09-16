@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Skill;
 use Illuminate\Http\Request;
-use DataTables;
 use Validator;
 
 class SkillController extends Controller
@@ -14,56 +13,75 @@ class SkillController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $skills = Skill::get();
-        if ($request->ajax()) {
-            $data = Skill::latest()->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editSkill"><i class="far fa-edit"></i></a>';
-
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteSkill"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-
-                    return $btn;
+        if (request()->ajax()) {
+            return datatables()->of(Skill::get())
+                ->addColumn('action', function ($data) {
+                    $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
+                    $button .= '&nbsp;&nbsp;';
+                    $button .= '<button type="button" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>';
+                    return $button;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('admin.skill.skills')->with('skills', $skills);
+        return view('admin.skill.skills');
     }
 
     public function store(Request $request)
     {
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()]);
-        }
-
-        Skill::updateOrCreate(
-            ['id' => $request->skill_id],
-            ['name' => $request->name]
+        $rules = array(
+            'name' => 'required'
         );
 
-        return response()->json(['success' => 'Skill saved successfully.']);
+        $error = Validator::make($request->all(), $rules);
+
+        if ($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        $form_data = array(
+            'name'        =>  $request->name
+        );
+
+        Skill::create($form_data);
+
+        return response()->json(['success' => 'Data Added successfully.']);
     }
 
     public function edit($id)
     {
-        $skill = Skill::find($id);
-        return response()->json($skill);
+        if (request()->ajax()) {
+            $data = Skill::findOrFail($id);
+            return response()->json(['data' => $data]);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $rules = array(
+            'name' => 'required'
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if ($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        $form_data = array(
+            'name'        =>  $request->name
+        );
+
+        Skill::whereId($request->hidden_id)->update($form_data);
+
+        return response()->json(['success' => 'Data is successfully updated']);
     }
 
     public function destroy($id)
     {
-        Skill::find($id)->delete();
-
-        return response()->json(['success' => 'Skill deleted successfully.']);
+        $data = Skill::findOrFail($id);
+        $data->delete();
     }
 }

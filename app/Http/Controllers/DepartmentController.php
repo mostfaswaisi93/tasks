@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use Illuminate\Http\Request;
-use DataTables;
 use Validator;
 
 class DepartmentController extends Controller
@@ -14,63 +13,79 @@ class DepartmentController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $departments = Department::get();
-        if ($request->ajax()) {
-            $data = Department::latest()->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editDepartment"><i class="far fa-edit"></i></a>';
-
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteDepartment"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-
-                    return $btn;
+        if (request()->ajax()) {
+            return datatables()->of(Department::get())
+                ->addColumn('action', function ($data) {
+                    $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
+                    $button .= '&nbsp;&nbsp;';
+                    $button .= '<button type="button" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>';
+                    return $button;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('admin.department.departments')->with('departments', $departments);
+        return view('admin.department.departments');
     }
 
     public function store(Request $request)
     {
-
-        // $request->validate([
-        //         'name' => 'required',
-        //         'description' => 'required'
-        //     ]);
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3',
-            'description' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()]);
-        }
-
-        Department::updateOrCreate(
-            ['id' => $request->department_id],
-            ['name' => $request->name],
-            ['description' => $request->description]
+        $rules = array(
+            'name'          => 'required',
+            'description'   => 'required'
         );
 
-        return response()->json(['success' => 'Department saved successfully.']);
+        $error = Validator::make($request->all(), $rules);
+
+        if ($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        $form_data = array(
+            'name'                  =>  $request->name,
+            'description'           =>  $request->description
+        );
+
+        Department::create($form_data);
+
+        return response()->json(['success' => 'Data Added successfully.']);
     }
 
     public function edit($id)
     {
-        $department = Department::find($id);
-        return response()->json($department);
+        if (request()->ajax()) {
+            $data = Department::findOrFail($id);
+            return response()->json(['data' => $data]);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $rules = array(
+            'name'          => 'required',
+            'description'   => 'required'
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if ($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        $form_data = array(
+            'name'                  =>  $request->name,
+            'description'           =>  $request->description
+        );
+
+        Department::whereId($request->hidden_id)->update($form_data);
+
+        return response()->json(['success' => 'Data is successfully updated']);
     }
 
     public function destroy($id)
     {
-        Department::find($id)->delete();
-
-        return response()->json(['success' => 'Department deleted successfully.']);
+        $data = Department::findOrFail($id);
+        $data->delete();
     }
 }

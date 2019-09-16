@@ -6,64 +6,21 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">All Projects</h3>
-            <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#addModal"><i
-                    class="fa fa-plus" aria-hidden="true"></i> Add New</button>
+            <button type="button" name="create_project" id="create_project" class="btn btn-success pull-right"><i
+                    class="fa fa-plus"></i> Create New Project</button>
         </div>
         <div class="box-body">
-            <table id="datatable" class="table table-responsive">
+            <table class="table table-bordered table-striped" id="data-table">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Title</th>
                         <th>Department</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th width="280px">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($projects as $item)
-                    <tr>
-                        <td>{{$item->title}}</td>
-                        <td>{{$item->department->name}}</td>
-                        @if ($item->status == 'pending')
-                        <td><button class="btn btn-info" style="width: 107px;"><i class="fas fa-clock"></i>
-                                Pending</button>@include('admin.project._select')</td>
-                        @elseif ($item->status == 'in_progress')
-                        <td><button class="btn btn-primary" style="width: 107px;"><i class="fas fa-spinner"></i>
-                                In Progress</button>@include('admin.project._select')</td>
-                        @elseif ($item->status == 'done')
-                        <td><button class="btn btn-success" style="width: 107px;"><i class="fas fa-check"></i>
-                                Done</button>@include('admin.project._select')</td>
-                        @elseif ($item->status == 'completed')
-                        <td><button class="btn btn-success" style="width: 107px;"><i class="fas fa-check-circle"></i>
-                                Completed</button>@include('admin.project._select')</td>
-                        @elseif ($item->status == 'cancel')
-                        <td><button class="btn btn-danger" style="width: 107px;"><i class="fas fa-window-close"></i>
-                                Cancel</button>@include('admin.project._select')</td>
-                        @else
-                        <td><button class="btn btn-warning" style="width: 107px;"><i class="fas fa-cog"></i>
-                                Late</button>@include('admin.project._select')</td>
-                        @endif
-                        <td>
-                            <button class="btn btn-info" data-mytitle="{{$item->title}}"
-                                data-mydes="{{$item->description}}" data-projectid="{{$item->id}}" data-toggle="modal"
-                                data-target="#show"><i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-primary" data-mytitle="{{$item->title}}"
-                                data-mydes="{{$item->description}}" data-projectid="{{$item->id}}"
-                                data-mydepartment="{{$item->department_id}}" data-toggle="modal" data-target="#edit"><i
-                                    class="far fa-edit"></i>
-                            </button>
-                            <button class="btn btn-danger" data-projectid={{$item->id}} data-toggle="modal"
-                                data-target="#delete"> <i class="fa fa-trash" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
             </table>
-            <div class="text-center">
-                {{$projects->render()}}
-            </div>
         </div>
     </div>
 </div>
@@ -73,84 +30,213 @@
 @endsection
 
 @push('scripts')
-<script type="text/javascript">
-    $(function () {
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-    });
 
-    var table = $('.data-table').DataTable({
-        processing: true,
-        // paging : false,
-        serverSide: true,
-        ajax: "{{ route('projects.index') }}",
-        columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-    });
+<script>
+    var cat = '';
+    var status = '';
+    var project_id = '';
+    $(document).ready(function(){
 
-    $('#createNewProject').click(function () {
-        $('#saveBtn').val("create-project");
-        $('#project_id').val('');
-        $('#projectForm').trigger("reset");
-        $('#modalHeading').html("Create New Project");
-        $('#projectModal').modal('show');
-    });
-
-    $('body').on('click', '.editProject', function () {
-      var project_id = $(this).data('id');
-      $.get("{{ route('projects.index') }}" +'/' + project_id +'/edit', function (data) {
-          $('#modalHeading').html("Edit Project");
-          $('#saveBtn').val("edit-user");
-          $('#projectModal').modal('show');
-          $('#project_id').val(data.id);
-          $('#name').val(data.name);
-      })
-   });
-
-    $('#saveBtn').click(function (e) {
-        e.preventDefault();
-        $(this).html('Sending..');
-
-        $.ajax({
-          data: $('#projectForm').serialize(),
-          url: "{{ route('projects.store') }}",
-          type: "POST",
-          dataType: 'json',
-          success: function (data) {
-
-              $('#projectForm').trigger("reset");
-              $('#projectModal').modal('hide');
-              table.draw();
-
-          },
-          error: function (data) {
-              console.log('Error:', data);
-              $('#saveBtn').html('Save Changes');
-          }
-      });
-    });
-
-    $('body').on('click', '.deleteProject', function () {
-
-        var project_id = $(this).data("id");
-        confirm("Are You sure want to delete !");
-
-        $.ajax({
-            type: "DELETE",
-            url: "{{ route('projects.store') }}"+'/'+project_id,
-            success: function (data) {
-                table.draw();
+        $('#data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax:{
+            url: "{{ route('projects.index') }}",
             },
-            error: function (data) {
-                console.log('Error:', data);
+            columns:[
+                {
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }, searchable: false, orderable: false
+                },
+                {data: 'title', name: 'title'},
+                {data: 'department', name: 'department'},
+                {data: 'status', name: 'status'},
+                {data: 'action', name: 'action', orderable: false}
+            ],
+            "columnDefs": [ {
+                "targets": 3,
+                render: function (data, type, row, meta){
+                    // console.log(row);
+                var $select = $(`<select class='status form-control' id='status' onchange=selectT(${row.id})>
+                <option>--Status--</option>
+                <option value='pending'>Pending</option>
+                <option value='in_progress'>In Progress</option>
+                <option value='done'>Done</option>
+                <option value='completed'>Completed</option>
+                <option value='cancel'>Cancel</option>done
+                <option value='late'>Late</option>
+                </select>`);
+                $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
+                return $select[0].outerHTML
+            }
+        } ],
+        });
+
+        $('#create_project').click(function(){
+            $('.modal-title').text("Add New Project");
+                $('#action_button').val("Add");
+                $('#projectForm').trigger("reset");
+                $('#action').val("Add");
+                $('#projectModal').modal('show');
+        });
+
+        $('#projectForm').on('submit', function(event){
+            event.preventDefault();
+            if($('#action').val() == 'Add')
+            {
+            $.ajax({
+                url:"{{ route('projects.store') }}",
+                method:"POST",
+                data: new FormData(this),
+                contentType: false,
+                cache:false,
+                processData: false,
+                dataType:"json",
+                success:function(data)
+                {
+                    var html = '';
+                    if(data.errors)
+                {
+                html = '<div class="alert alert-danger">';
+                for(var count = 0; count < data.errors.length; count++)
+                {
+                    html += '<p>' + data.errors[count] + '</p>';
+                }
+                html += '</div>';
+                }
+                if(data.success)
+                {
+                    $('#projectForm')[0].reset();
+                    $('#data-table').DataTable().ajax.reload();
+                    $('#projectModal').modal('hide');
+                }
+                    $('#form_result').html(html);
+                }
+            });
+        }
+        if($('#action').val() == "Edit")
+        {
+            $.ajax({
+                url:"{{ route('projects.update') }}",
+                method:"POST",
+                data:new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType:"json",
+                success:function(data)
+                {
+                var html = '';
+                if(data.errors)
+                {
+                html = '<div class="alert alert-danger">';
+                for(var count = 0; count < data.errors.length; count++)
+                {
+                html += '<p>' + data.errors[count] + '</p>';
+                }
+                html += '</div>';
+                }
+                if(data.success)
+                {
+                $('#projectForm')[0].reset();
+                $('#data-table').DataTable().ajax.reload();
+                $('#projectModal').modal('hide');
+                }
+                $('#form_result').html(html);
+                }
+                });
             }
         });
+
+        $(document).on('click', '.edit', function(){
+            var id = $(this).attr('id');
+            $('#form_result').html('');
+            $.ajax({
+                url:"/admin/projects/"+id+"/edit",
+                dataType:"json",
+                success:function(html){
+                    $('#title').val(html.data.title);
+                    $('#department_id').val(html.data.department_id);
+                    $('#description').val(html.data.description);
+                    $('#hidden_id').val(html.data.id);
+                    $('.modal-title').text("Edit New Project");
+                    $('#action_button').val("Edit");
+                    $('#action').val("Edit");
+                    $('#projectModal').modal('show');
+                }
+            });
+        });
+
+        $(document).on('click', '.delete', function(){
+            project_id = $(this).attr('id');
+            $('#confirmModal').modal('show');
+        });
+
+        $('#ok_button').click(function(){
+            $.ajax({
+                url:"projects/destroy/"+project_id,
+                beforeSend:function(){
+                    $('#ok_button').text('Deleting...');
+                },
+                success: function (data) {
+                        $('#confirmModal').modal('hide');
+                        $('#data-table').DataTable().ajax.reload();
+                        $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                    },
+                    error: function (data) {
+                        console.log('error:', data);
+                        $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                }
+            });
+        });
+
+        $(document).on('change', '#status', function(e) {
+         //   alert( $(this).find("option:selected").val());
+            var status_project = $(this).find("option:selected").val();
+            alert(status_project);
+            console.log(project_id)
+            $.ajax({
+                url:"projects/pending/"+project_id+"?status="+status_project,
+                headers: {
+                    'X-CSRF-Token': "{{ csrf_token() }}"
+                },
+                method:"POST",
+                data:{
+
+                },
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType:"json",
+                success:function(data)
+                {
+                var html = '';
+                if(data.errors)
+                {
+                html = '<div class="alert alert-danger">';
+                for(var count = 0; count < data.errors.length; count++)
+                {
+                html += '<p>' + data.errors[count] + '</p>';
+                }
+                html += '</div>';
+                }
+                if(data.success)
+                {
+                $('#data-table').DataTable().ajax.reload();
+                }
+                $('#form_result').html(html);
+                }
+                });
+        });
+
     });
-  });
+
+
+    function selectT(id){
+        project_id = id;
+    }
 </script>
+
 @endpush

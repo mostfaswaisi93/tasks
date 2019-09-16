@@ -24,7 +24,8 @@
 <script src="{{url('/design/adminlte/dist/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('/design/adminlte/dist/js/demo.js')}}"></script>
-
+<!-- bootstrap time picker -->
+<script src="{{url('/design/adminlte/plugins/timepicker/bootstrap-timepicker.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/js/all.min.js" type="text/javascript"></script>
 
 @stack('scripts')

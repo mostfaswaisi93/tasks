@@ -7,7 +7,7 @@ use App\Project;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use DataTables;
+use Validator;
 
 class TaskController extends Controller
 {
@@ -16,63 +16,93 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $tasks = Task::get();
-        if ($request->ajax()) {
-            $data = Task::latest()->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editTask"><i class="far fa-edit"></i></a>';
-
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteTask"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-
-                    return $btn;
+        if (request()->ajax()) {
+            return datatables()->of(Task::get())
+                ->addColumn('action', function ($data) {
+                    $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
+                    $button .= '&nbsp;&nbsp;';
+                    $button .= '<button type="button" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>';
+                    return $button;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('admin.task.tasks')->with('tasks', $tasks);
+        return view('admin.task.tasks')
+            ->with('employees', Employee::get(['id', 'full_name']))
+            ->with('projects', Project::get(['id', 'title']));
     }
 
     public function store(Request $request)
     {
-
-        $request->validate([
-            'name' => 'required|max:255'
-        ]);
-
-        Task::updateOrCreate(
-            ['id' => $request->task_id],
-            ['name' => $request->name]
+        $rules = array(
+            'title'         => 'required',
+            'description'   => 'required',
+            'project_id'    => 'required',
+            'notes'         => 'required',
+            'start'         => 'date_format:H:i',
+            'end'           => 'required'
         );
 
-        return response()->json(['success' => 'Task saved successfully.']);
+        $error = Validator::make($request->all(), $rules);
+
+        if ($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        $form_data = array(
+            'title'                 =>  $request->title,
+            'description'           =>  $request->description,
+            'project_id'            =>  $request->project_id,
+            'notes'                 =>  $request->notes,
+            'start'                 =>  Carbon::createFromFormat('H:i', $request->start),
+            'end'                   =>  Carbon::createFromFormat('H:i', $request->end)
+        );
+
+        Task::create($form_data)->employees()->attach($request->employee_id);
+
+        return response()->json(['success' => 'Data Added successfully.']);
     }
 
     public function edit($id)
     {
-        $task = Task::find($id);
-        return response()->json($task);
+        if (request()->ajax()) {
+            $data = Task::findOrFail($id);
+            return response()->json(['data' => $data]);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $rules = array(
+            'title' => 'required',
+            'description' => 'required',
+            'notes' => 'required',
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if ($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        $form_data = array(
+            'title'        =>  $request->title,
+            'description'        =>  $request->description,
+            'notes'        =>  $request->notes
+        );
+
+        Task::whereId($request->hidden_id)->update($form_data);
+
+        return response()->json(['success' => 'Data is successfully updated']);
     }
 
     public function destroy($id)
     {
-        Task::find($id)->delete();
-
-        return response()->json(['success' => 'Task deleted successfully.']);
+        $data = Task::findOrFail($id);
+        $data->delete();
     }
-
-    // public function index()
-    // {
-    //     return view('admin.task.tasks')
-    //         ->with('tasks', Task::paginate(3))
-    //         ->with('tasks', Task::get())
-    //         ->with('employees', Employee::get(['id', 'full_name']))
-    //         ->with('projects', Project::get(['id', 'title']));
-    // }
 
     // public function store(Request $request)
     // {
@@ -111,42 +141,8 @@ class TaskController extends Controller
     //         ->with('projects', Project::get(['id', 'title']));
     // }
 
-    // public function update(Request $request, Task $task)
-    // {
-    //     $rules = [
-    //         'start'        => 'date_format:H:i',
-    //         'end'          => 'date_format:H:i|after:start',
-    //     ];
 
-    //     $request->validate([
-    //         'title' => 'required',
-    //         'description' => 'required',
-    //         $rules,
-    //         'notes' => 'required'
-    //     ]);
 
-    //     // dd($request->all());
-
-    //     $task->title = $request->title;
-    //     $task->description = $request->description;
-    //     $task->employee_id = $request->employee_id;
-    //     $task->project_id = $request->project_id;
-    //     $task->start = Carbon::createFromFormat('H:i', $request->start);
-    //     $task->end = Carbon::createFromFormat('H:i', $request->end);
-    //     $task->empEndTask = NULL;
-    //     $task->notes = $request->notes;
-    //     // $task->status =  $request->status;
-    //     $task->save();
-
-    //     return redirect('admin/tasks');
-    // }
-
-    // public function destroy(Task $task)
-    // {
-    //     $task->delete();
-
-    //     return redirect('admin/tasks');
-    // }
 
     public function pending($id)
     {

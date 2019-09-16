@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Department;
 use App\Project;
 use Illuminate\Http\Request;
-use DataTables;
 use Validator;
 
 class ProjectController extends Controller
@@ -15,119 +14,105 @@ class ProjectController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $projects = Project::get();
-        if ($request->ajax()) {
-            $data = Project::latest()->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
+        $projects = Project::with(['department'])->get();
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProject"><i class="far fa-edit"></i></a>';
-
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProject"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-
-                    return $btn;
+        if (request()->ajax()) {
+            return datatables()->of($projects)
+            ->addColumn('department', function($data) {
+                return $data->department->name;
+            })
+                ->addColumn('action', function ($data) {
+                    $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
+                    $button .= '&nbsp;&nbsp;';
+                    $button .= '<button type="button" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>';
+                    return $button;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('admin.project.projects')->with('projects', $projects)
+
+        return view('admin.project.projects')
+            ->with('projects', Project::get())
             ->with('departments', Department::get(['id', 'name']));
     }
 
     public function store(Request $request)
     {
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'description' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()]);
-        }
-
-        Project::updateOrCreate(
-            ['id' => $request->project_id],
-            ['name' => $request->name]
+        $rules = array(
+            'title'             => 'required',
+            'description'       => 'required',
+            'department_id'     => 'required'
         );
 
-        //     $project = new Project();
+        $error = Validator::make($request->all(), $rules);
 
-        //     $project->title = $request->title;
-        //     $project->description = $request->description;
-        //     $project->department_id = $request->department_id;
-        //     $project->save();
+        if ($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
 
-        return response()->json(['success' => 'Project saved successfully.']);
+        $form_data = array(
+            'title'                     =>  $request->title,
+            'description'               =>  $request->description,
+            'department_id'             =>  $request->department_id
+        );
+
+        Project::create($form_data);
+
+        return response()->json(['success' => 'Data Added successfully.']);
     }
 
     public function edit($id)
     {
-        $project = Project::find($id);
-        return response()->json($project);
+        if (request()->ajax()) {
+            $data = Project::findOrFail($id);
+            return response()->json(['data' => $data]);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $rules = array(
+            'title'             => 'required',
+            'description'       => 'required',
+            'department_id'     => 'required'
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if ($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        $form_data = array(
+            'title'                     =>  $request->title,
+            'description'               =>  $request->description,
+            'department_id'             =>  $request->department_id
+        );
+
+        Project::whereId($request->hidden_id)->update($form_data);
+
+        return response()->json(['success' => 'Data is successfully updated']);
     }
 
     public function destroy($id)
     {
-        Project::find($id)->delete();
-
-        return response()->json(['success' => 'Project deleted successfully.']);
+        $data = Project::findOrFail($id);
+        $data->delete();
     }
 
-    public function pending($id)
+    public function pending(Request $request ,$id)
     {
         $project = Project::find($id);
-        $project->status = 'pending';
-        $project->save();
+        $status = $request->get('status');
+        $project->status = $status;
+        // Project::whereId($request->hidden_id)->update($form_data);
 
-        return redirect()->back();
-    }
+        $project = $project->save();
+        if($project){
+            return response(['success'=>TRUE , "message"=>'Done']);
+        }
 
-    public function in_progress($id)
-    {
-        $project = Project::find($id);
-        $project->status = 'in_progress';
-        $project->save();
-
-        return redirect()->back();
-    }
-
-    public function done($id)
-    {
-        $project = Project::find($id);
-        $project->status = 'done';
-        $project->save();
-
-        return redirect()->back();
-    }
-
-    public function completed($id)
-    {
-        $project = Project::find($id);
-        $project->status = 'completed';
-        $project->save();
-
-        return redirect()->back();
-    }
-
-    public function cancel($id)
-    {
-        $project = Project::find($id);
-        $project->status = 'cancel';
-        $project->save();
-
-        return redirect()->back();
-    }
-
-    public function late($id)
-    {
-        $project = Project::find($id);
-        $project->status = 'late';
-        $project->save();
-
-        return redirect()->back();
     }
 }
