@@ -18,8 +18,13 @@ class EmployeeController extends Controller
 
     public function index()
     {
+        $employees = Employee::with(['department', 'skills'])->get();
+
         if (request()->ajax()) {
-            return datatables()->of(Employee::get())
+            return datatables()->of($employees)
+                ->addColumn('department', function ($data) {
+                    return $data->department->name;
+                })
                 ->addColumn('action', function ($data) {
                     $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
                     $button .= '&nbsp;&nbsp;';
@@ -69,7 +74,7 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         if (request()->ajax()) {
-            $data = Employee::findOrFail($id);
+            $data = Employee::with(['skills'])->findOrFail($id);
             return response()->json(['data' => $data]);
         }
     }
@@ -101,9 +106,8 @@ class EmployeeController extends Controller
             'user_id'               =>  Auth::id()
         );
 
-        Employee::whereId($request->hidden_id)->update($form_data)
-            ->skills()->attach($request->skill_id);
-
+        $employee = Employee::whereId($request->hidden_id)->update($form_data);
+        $employee->skills()->sync($request->skill_id);
         return response()->json(['success' => 'Data is successfully updated']);
     }
 
@@ -114,48 +118,15 @@ class EmployeeController extends Controller
         $data->skills()->detach();
     }
 
-    public function pending($id)
+    public function updateStatus(Request $request, $id)
     {
-        $employee = Employee::find($id);
-        $employee->status = 'pending';
-        $employee->save();
+        $employee   = Employee::find($id);
+        $status     = $request->get('status');
+        $employee->status = $status;
+        $employee   = $employee->save();
 
-        return redirect()->back();
-    }
-
-    public function in_progress($id)
-    {
-        $employee = Employee::find($id);
-        $employee->status = 'in_progress';
-        $employee->save();
-
-        return redirect()->back();
-    }
-
-    public function completed($id)
-    {
-        $employee = Employee::find($id);
-        $employee->status = 'completed';
-        $employee->save();
-
-        return redirect()->back();
-    }
-
-    public function inactive($id)
-    {
-        $employee = Employee::find($id);
-        $employee->status = 'inactive';
-        $employee->save();
-
-        return redirect()->back();
-    }
-
-    public function leave($id)
-    {
-        $employee = Employee::find($id);
-        $employee->status = 'leave';
-        $employee->save();
-
-        return redirect()->back();
+        if ($employee) {
+            return response(['success' => TRUE, "message" => 'Done']);
+        }
     }
 }

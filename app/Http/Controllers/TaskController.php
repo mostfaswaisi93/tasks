@@ -18,8 +18,17 @@ class TaskController extends Controller
 
     public function index()
     {
+        $tasks = Task::with(['project', 'employees'])->select('*')->get();
+        // dd($tasks);
+        // ->select(array('tasks.id', 'tasks.full_name'))
         if (request()->ajax()) {
-            return datatables()->of(Task::get())
+            return datatables()->of($tasks)
+                ->addColumn('project', function ($data) {
+                    return $data->project->title;
+                })
+                ->addColumn('employees', function ($data) {
+                    return $data->employees;
+                })
                 ->addColumn('action', function ($data) {
                     $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
                     $button .= '&nbsp;&nbsp;';
@@ -30,6 +39,7 @@ class TaskController extends Controller
                 ->make(true);
         }
         return view('admin.task.tasks')
+            ->with('tasks', Task::get())
             ->with('employees', Employee::get(['id', 'full_name']))
             ->with('projects', Project::get(['id', 'title']));
     }
@@ -42,7 +52,7 @@ class TaskController extends Controller
             'project_id'    => 'required',
             'notes'         => 'required',
             'start'         => 'date_format:H:i',
-            'end'           => 'required'
+            'end'           => 'date_format:H:i|after:start'
         );
 
         $error = Validator::make($request->all(), $rules);
@@ -76,9 +86,12 @@ class TaskController extends Controller
     public function update(Request $request)
     {
         $rules = array(
-            'title' => 'required',
-            'description' => 'required',
-            'notes' => 'required',
+            'title'         => 'required',
+            'description'   => 'required',
+            'project_id'    => 'required',
+            'notes'         => 'required',
+            'start'         => 'date_format:H:i',
+            'end'           => 'date_format:H:i|after:start'
         );
 
         $error = Validator::make($request->all(), $rules);
@@ -88,9 +101,12 @@ class TaskController extends Controller
         }
 
         $form_data = array(
-            'title'        =>  $request->title,
-            'description'        =>  $request->description,
-            'notes'        =>  $request->notes
+            'title'                 =>  $request->title,
+            'description'           =>  $request->description,
+            'project_id'            =>  $request->project_id,
+            'notes'                 =>  $request->notes,
+            'start'                 =>  Carbon::createFromFormat('H:i', $request->start),
+            'end'                   =>  Carbon::createFromFormat('H:i', $request->end)
         );
 
         Task::whereId($request->hidden_id)->update($form_data);
@@ -104,97 +120,15 @@ class TaskController extends Controller
         $data->delete();
     }
 
-    // public function store(Request $request)
-    // {
-    //     $rules = [
-    //         'start'        => 'date_format:H:i',
-    //         'end'          => 'date_format:H:i|after:start',
-    //     ];
-
-    //     $request->validate([
-    //         'title' => 'required',
-    //         'description' => 'required',
-    //         $rules,
-    //         'notes' => 'required'
-    //     ]);
-
-    //     $task = new Task();
-    //     // dd($request->all());
-
-    //     $task->title = $request->title;
-    //     $task->description = $request->description;
-    //     $task->project_id = $request->project_id;
-    //     $task->start = Carbon::createFromFormat('H:i', $request->start);
-    //     $task->end = Carbon::createFromFormat('H:i', $request->end);
-    //     $task->notes = $request->notes;
-    //     $task->save();
-    //     $task->employees()->attach($request->employee_id);
-
-    //     return redirect('admin/tasks');
-    // }
-
-    // public function edit(Task $task)
-    // {
-    //     return view('admin.task.editTask')
-    //         ->with('task', $task)
-    //         ->with('employees', Employee::get(['id', 'full_name']))
-    //         ->with('projects', Project::get(['id', 'title']));
-    // }
-
-
-
-
-    public function pending($id)
+    public function updateStatus(Request $request, $id)
     {
-        $task = Task::find($id);
-        $task->status = 'pending';
-        $task->save();
+        $task   = Task::find($id);
+        $status     = $request->get('status');
+        $task->status = $status;
+        $task   = $task->save();
 
-        return redirect()->back();
-    }
-
-    public function in_progress($id)
-    {
-        $task = Task::find($id);
-        $task->status = 'in_progress';
-        $task->save();
-
-        return redirect()->back();
-    }
-
-    public function done($id)
-    {
-        $task = Task::find($id);
-        $task->status = 'done';
-        $task->save();
-
-        return redirect()->back();
-    }
-
-    public function completed($id)
-    {
-        $task = Task::find($id);
-        $task->status = 'completed';
-        $task->save();
-
-        return redirect()->back();
-    }
-
-    public function cancel($id)
-    {
-        $task = Task::find($id);
-        $task->status = 'cancel';
-        $task->save();
-
-        return redirect()->back();
-    }
-
-    public function late($id)
-    {
-        $task = Task::find($id);
-        $task->status = 'late';
-        $task->save();
-
-        return redirect()->back();
+        if ($task) {
+            return response(['success' => TRUE, "message" => 'Done']);
+        }
     }
 }

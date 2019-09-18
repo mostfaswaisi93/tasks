@@ -21,15 +21,13 @@
                     <div class="form-group">
                         <label for="email" class="col-md-2 control-label">Email: </label>
                         <div class="col-md-9">
-                            <input class="form-control" id="email" name="email" type="text"
-                                placeholder="Enter Email" />
+                            <input class="form-control" id="email" name="email" type="text" placeholder="Enter Email" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="phone" class="col-md-2 control-label">Phone: </label>
                         <div class="col-md-9">
-                            <input class="form-control" id="phone" name="phone" type="text"
-                                placeholder="Enter Phone" />
+                            <input class="form-control" id="phone" name="phone" type="text" placeholder="Enter Phone" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -42,8 +40,8 @@
                     <div class="form-group">
                         <label for="job_title" class="col-md-2 control-label">Job Title: </label>
                         <div class="col-md-9">
-                            <input class="form-control" id="job_title" name="job_title"
-                                type="text" placeholder="Enter Job Title" />
+                            <input class="form-control" id="job_title" name="job_title" type="text"
+                                placeholder="Enter Job Title" />
                         </div>
                     </div>
                     <div class="form-group">

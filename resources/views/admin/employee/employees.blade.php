@@ -18,7 +18,7 @@
                         <th>Department</th>
                         <th>Job Title</th>
                         <th>Status</th>
-                        <th width="200px">Action</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
             </table>
@@ -32,12 +32,17 @@
 
 @push('scripts')
 
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
 <script>
+    var status = '';
+    var employee_id = '';
     $(document).ready(function(){
 
     $('#data-table').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
         ajax:{
         url: "{{ route('employees.index') }}",
         },
@@ -48,11 +53,28 @@
                 }, searchable: false, orderable: false
             },
             {data: 'full_name', name: 'full_name'},
-            {data: 'department_id', name: 'department_id'},
+            {data: 'department', name: 'department'},
             {data: 'job_title', name: 'job_title'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false}
-        ]
+        ],
+        "columnDefs": [ {
+                "targets": 4,
+                render: function (data, type, row, meta){
+                    // console.log(row);
+
+                var $select = $(`<select class='status form-control'
+                id='status' onchange=selectStatus(${row.id})>
+                <option value='pending'>Pending</option>
+                <option value='in_progress'>In Progress</option>
+                <option value='completed'>Completed</option>
+                <option value='inactive'>In Active</option>
+                <option value='leave'>Leave</option>
+                </select>`);
+                $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
+                return $select[0].outerHTML
+            }
+        } ],
     });
 
     $('#create_employee').click(function(){
@@ -138,13 +160,25 @@
             url:"/admin/employees/"+id+"/edit",
             dataType:"json",
             success:function(html){
+                console.log(html);
+                var skills = html.data.skills;
+                var skill_ids = _.map(skills, 'id');
                 $('#full_name').val(html.data.full_name);
                 $('#email').val(html.data.email);
                 $('#phone').val(html.data.phone);
                 $('#address').val(html.data.address);
                 $('#job_title').val(html.data.job_title);
                 $('#department_id').val(html.data.department_id);
-                // $('#skill_id').val(html.data.skill_id);
+                $('#skill_id > option').prop('selected', false);
+                $('#skill_id > option').each(function(){
+                    var item = this;
+                    if(skill_ids.indexOf(parseInt(item.value)) > -1){
+                        console.log('selected',true);
+                        $(this).prop('selected', true);
+                    }else{
+                        console.log('selected',false);
+                    }
+                });
                 $('#hidden_id').val(html.data.id);
                 $('.modal-title').text("Edit New Employee");
                 $('#action_button').val("Edit");
@@ -154,7 +188,6 @@
         });
     });
 
-    var employee_id;
     $(document).on('click', '.delete', function(){
         employee_id = $(this).attr('id');
         $('#confirmModal').modal('show');
@@ -177,7 +210,48 @@
             }
         });
     });
-});
+
+    $(document).on('change', '#status', function(e) {
+            var status_employee = $(this).find("option:selected").val();
+            toastr.success('Status changed!', 'Success!')
+            console.log(employee_id)
+            $.ajax({
+                url:"employees/updateStatus/"+employee_id+"?status="+status_employee,
+                headers: {
+                    'X-CSRF-Token': "{{ csrf_token() }}"
+                },
+                method:"POST",
+                data:{},
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType:"json",
+                success:function(data)
+                    {
+                    var html = '';
+                    if(data.errors)
+                    {
+                        html = '<div class="alert alert-danger">';
+                        for(var count = 0; count < data.errors.length; count++)
+                    {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                        html += '</div>';
+                    }
+                    if(data.success)
+                    {
+                        $('#data-table').DataTable().ajax.reload();
+                    }
+                }
+            });
+        });
+
+    });
+
+    function selectStatus(id){
+        employee_id = id;
+    }
+
 </script>
 
 @endpush

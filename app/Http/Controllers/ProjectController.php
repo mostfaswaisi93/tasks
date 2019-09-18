@@ -20,9 +20,9 @@ class ProjectController extends Controller
 
         if (request()->ajax()) {
             return datatables()->of($projects)
-            ->addColumn('department', function($data) {
-                return $data->department->name;
-            })
+                ->addColumn('department', function ($data) {
+                    return $data->department->name;
+                })
                 ->addColumn('action', function ($data) {
                     $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
                     $button .= '&nbsp;&nbsp;';
@@ -102,17 +102,15 @@ class ProjectController extends Controller
         $data->delete();
     }
 
-    public function pending(Request $request ,$id)
+    public function updateStatus(Request $request, $id)
     {
         $project = Project::find($id);
         $status = $request->get('status');
         $project->status = $status;
-        // Project::whereId($request->hidden_id)->update($form_data);
-
         $project = $project->save();
-        if($project){
-            return response(['success'=>TRUE , "message"=>'Done']);
-        }
 
+        if ($project) {
+            return response(['success' => TRUE, "message" => 'Done']);
+        }
     }
 }

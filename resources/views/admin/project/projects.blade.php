@@ -17,7 +17,7 @@
                         <th>Title</th>
                         <th>Department</th>
                         <th>Status</th>
-                        <th width="280px">Action</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
             </table>
@@ -32,7 +32,6 @@
 @push('scripts')
 
 <script>
-    var cat = '';
     var status = '';
     var project_id = '';
     $(document).ready(function(){
@@ -56,22 +55,21 @@
                 {data: 'action', name: 'action', orderable: false}
             ],
             "columnDefs": [ {
-                "targets": 3,
-                render: function (data, type, row, meta){
-                    // console.log(row);
-                var $select = $(`<select class='status form-control' id='status' onchange=selectT(${row.id})>
-                <option>--Status--</option>
-                <option value='pending'>Pending</option>
-                <option value='in_progress'>In Progress</option>
-                <option value='done'>Done</option>
-                <option value='completed'>Completed</option>
-                <option value='cancel'>Cancel</option>done
-                <option value='late'>Late</option>
-                </select>`);
-                $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
-                return $select[0].outerHTML
-            }
-        } ],
+                    "targets": 3,
+                    render: function (data, type, row, meta){
+                    var $select = $(`<select class='status form-control'
+                    id='status' onchange=selectStatus(${row.id})>
+                    <option value='pending'>Pending</option>
+                    <option value='in_progress'>In Progress</option>
+                    <option value='done'>Done</option>
+                    <option value='completed'>Completed</option>
+                    <option value='cancel'>Cancel</option>
+                    <option value='late'>Late</option>
+                    </select>`);
+                    $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
+                    return $select[0].outerHTML
+                }
+            } ],
         });
 
         $('#create_project').click(function(){
@@ -193,50 +191,46 @@
         });
 
         $(document).on('change', '#status', function(e) {
-         //   alert( $(this).find("option:selected").val());
             var status_project = $(this).find("option:selected").val();
-            alert(status_project);
+            toastr.success('Status changed!', 'Success!')
             console.log(project_id)
             $.ajax({
-                url:"projects/pending/"+project_id+"?status="+status_project,
+                url:"projects/updateStatus/"+project_id+"?status="+status_project,
                 headers: {
                     'X-CSRF-Token': "{{ csrf_token() }}"
                 },
                 method:"POST",
-                data:{
-
-                },
+                data:{},
                 contentType: false,
                 cache: false,
                 processData: false,
                 dataType:"json",
                 success:function(data)
-                {
-                var html = '';
-                if(data.errors)
-                {
-                html = '<div class="alert alert-danger">';
-                for(var count = 0; count < data.errors.length; count++)
-                {
-                html += '<p>' + data.errors[count] + '</p>';
+                    {
+                    var html = '';
+                    if(data.errors)
+                    {
+                        html = '<div class="alert alert-danger">';
+                        for(var count = 0; count < data.errors.length; count++)
+                    {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                        html += '</div>';
+                    }
+                    if(data.success)
+                    {
+                        $('#data-table').DataTable().ajax.reload();
+                    }
                 }
-                html += '</div>';
-                }
-                if(data.success)
-                {
-                $('#data-table').DataTable().ajax.reload();
-                }
-                $('#form_result').html(html);
-                }
-                });
+            });
         });
 
     });
 
-
-    function selectT(id){
+    function selectStatus(id){
         project_id = id;
     }
+
 </script>
 
 @endpush

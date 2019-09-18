@@ -22,7 +22,7 @@
                         <div class="col-md-9">
                             <select class="form-control" name="department_id" id="department_id">
                                 @foreach ($departments as $department)
-                                        <option value="{{$department->id}}">{{$department->name}}</option>
+                                <option value="{{$department->id}}">{{$department->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -74,21 +74,3 @@
         </div>
     </div>
 </div>
-
-{{-- <div class="form-group">
-    <label for="department_id" class="col-md-2 control-label">Department</label>
-    <div class="col-md-9">
-        <select class="form-control" id="department_id" name="department_id">
-            @foreach ($departments as $department)
-            <option value="{{$department->id}}" @if($department->id == $project->department_id)
-selected @endif>{{$department->name}}</option>
-@endforeach
-@foreach ($departments as $department)
-<option value="{{$department->id}}">{{$department->name}}</option>
-@endforeach
-</select>
-<span class="help-block">
-    <strong></strong>
-</span>
-</div>
-</div> --}}

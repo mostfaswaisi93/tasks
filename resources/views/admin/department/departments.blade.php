@@ -16,7 +16,7 @@
                         <th>No</th>
                         <th>Name</th>
                         <th>Description</th>
-                        <th width="280px">Action</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
             </table>
