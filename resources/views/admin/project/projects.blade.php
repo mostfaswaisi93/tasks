@@ -192,7 +192,11 @@
 
         $(document).on('change', '#status', function(e) {
             var status_project = $(this).find("option:selected").val();
-            toastr.success('Status changed!', 'Success!')
+            if(status_project == true){
+                toastr.error('Status Not changed!', 'Error!')
+            }else{
+                toastr.success('Status changed!', 'Success!')
+            }
             console.log(project_id)
             $.ajax({
                 url:"projects/updateStatus/"+project_id+"?status="+status_project,
@@ -230,6 +234,8 @@
     function selectStatus(id){
         project_id = id;
     }
+
+    $('.select2').select2();
 
 </script>
 

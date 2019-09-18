@@ -34,6 +34,8 @@
 
 @push('scripts')
 
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
 <script>
     var status  = '';
     var task_id = '';
@@ -161,7 +163,25 @@
                 url:"/admin/tasks/"+id+"/edit",
                 dataType:"json",
                 success:function(html){
-                    $('#name').val(html.data.name);
+                    console.log(html);
+                    var employees = html.data.employees;
+                    var employee_ids = _.map(employees, 'id');
+                    $('#title').val(html.data.title);
+                    $('#description').val(html.data.description);
+                    $('#project_id').val(html.data.project_id);
+                    $('#notes').val(html.data.notes);
+                    $('#start').val(html.data.start);
+                    $('#end').val(html.data.end);
+                    $('#employee_id > option').prop('selected', false);
+                    $('#employee_id > option').each(function(){
+                        var item = this;
+                        if(employee_ids.indexOf(parseInt(item.value)) > -1){
+                            console.log('selected',true);
+                            $(this).prop('selected', true);
+                        }else{
+                            console.log('selected',false);
+                        }
+                    });
                     $('#hidden_id').val(html.data.id);
                     $('.modal-title').text("Edit New Task");
                     $('#action_button').val("Edit");
@@ -196,7 +216,11 @@
 
         $(document).on('change', '#status', function(e) {
             var status_task = $(this).find("option:selected").val();
-            toastr.success('Status changed!', 'Success!')
+            if(status_task == true){
+                toastr.error('Status Not changed!', 'Error!')
+            }else{
+                toastr.success('Status changed!', 'Success!')
+            }
             console.log(task_id)
             $.ajax({
                 url:"tasks/updateStatus/"+task_id+"?status="+status_task,
@@ -249,7 +273,10 @@
         // console.log(e.timeStamp);
         var new_time =  moment(e.timeStamp).add(20, 'm').format("HH:mm");
         $('body').find('#end').val(new_time);
-     })
+     });
+
+     $('.select2').select2();
+
 </script>
 
 @endpush

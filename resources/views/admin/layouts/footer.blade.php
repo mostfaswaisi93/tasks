@@ -23,6 +23,8 @@
 <script src="{{url('/design/adminlte/dist/js/demo.js')}}"></script>
 <!-- bootstrap time picker -->
 <script src="{{url('/design/adminlte/plugins/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<!-- Select2 -->
+<script src="{{url('/design/adminlte/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/js/all.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>

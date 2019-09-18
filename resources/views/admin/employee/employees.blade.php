@@ -61,8 +61,6 @@
         "columnDefs": [ {
                 "targets": 4,
                 render: function (data, type, row, meta){
-                    // console.log(row);
-
                 var $select = $(`<select class='status form-control'
                 id='status' onchange=selectStatus(${row.id})>
                 <option value='pending'>Pending</option>
@@ -213,7 +211,11 @@
 
     $(document).on('change', '#status', function(e) {
             var status_employee = $(this).find("option:selected").val();
-            toastr.success('Status changed!', 'Success!')
+            if(status_employee == true){
+                toastr.error('Status Not changed!', 'Error!')
+            }else{
+                toastr.success('Status changed!', 'Success!')
+            }
             console.log(employee_id)
             $.ajax({
                 url:"employees/updateStatus/"+employee_id+"?status="+status_employee,
@@ -251,6 +253,8 @@
     function selectStatus(id){
         employee_id = id;
     }
+
+    $('.select2').select2();
 
 </script>
 

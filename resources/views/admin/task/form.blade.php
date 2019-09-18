@@ -37,7 +37,7 @@
                     <div class="form-group">
                         <label for="project_id" class="col-md-2 control-label">Project: </label>
                         <div class="col-md-9">
-                            <select class="form-control" id="project_id" name="project_id">
+                            <select class="form-control select2" id="project_id" name="project_id" style="width: 100%;">
                                 @foreach ($projects as $project)
                                 <option value="{{$project->id}}">{{$project->title}}</option>
                                 @endforeach
@@ -45,27 +45,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="start" class="col-md-2 control-label">Start Time</label>
+                        <label for="start" class="control-label col-md-2">Start Time: </label>
                         <div class="col-md-9">
-                            <div class="input-group">
-                                <input type="text" class="form-control timepickerStart" name="start" type="text"
-                                    id="start" placeholder="Start Time">
-                                <div class="input-group-addon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                            </div>
+                            <input type="text" name="start" id="start" class="form-control timepickerStart"
+                                placeholder="Enter Start Time" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="end" class="col-md-2 control-label">End Time</label>
+                        <label for="end" class="control-label col-md-2">End Time: </label>
                         <div class="col-md-9">
-                            <div class="input-group">
-                                <input type="text" class="form-control timepickerEnd" name="end" type="text" id="end"
-                                    placeholder="End Time">
-                                <div class="input-group-addon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                            </div>
+                            <input type="text" name="end" id="end" class="form-control timepickerEnd"
+                                placeholder="Enter End Time" />
                         </div>
                     </div>
                     <div class="form-group">

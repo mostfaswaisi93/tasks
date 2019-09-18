@@ -19,8 +19,7 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::with(['project', 'employees'])->select('*')->get();
-        // dd($tasks);
-        // ->select(array('tasks.id', 'tasks.full_name'))
+
         if (request()->ajax()) {
             return datatables()->of($tasks)
                 ->addColumn('project', function ($data) {
@@ -78,7 +77,7 @@ class TaskController extends Controller
     public function edit($id)
     {
         if (request()->ajax()) {
-            $data = Task::findOrFail($id);
+            $data = Task::with(['employees'])->findOrFail($id);
             return response()->json(['data' => $data]);
         }
     }

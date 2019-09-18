@@ -47,7 +47,8 @@
                     <div class="form-group">
                         <label for="department_id" class="col-md-2 control-label">Department: </label>
                         <div class="col-md-9">
-                            <select class="form-control" name="department_id" id="department_id">
+                            <select class="form-control select2" name="department_id" id="department_id"
+                                style="width: 100%;">
                                 @foreach ($departments as $department)
                                 <option value="{{$department->id}}">{{$department->name}}</option>
                                 @endforeach
@@ -57,7 +58,9 @@
                     <div class="form-group">
                         <label for="skill_id" class="col-md-2 control-label">Skills: </label>
                         <div class="col-md-9">
-                            <select class="form-control" id="skill_id" name="skill_id[]" multiple>
+                            {{-- <select class="form-control" id="skill_id" name="skill_id[]" multiple> --}}
+                            <select class="form-control select2" id="skill_id" name="skill_id[]" multiple
+                                style="width: 100%;">
                                 @foreach ($skills as $skill)
                                 <option value="{{$skill->id}}">{{$skill->name}}</option>
                                 @endforeach

@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label for="department_id" class="col-md-2 control-label">Department: </label>
                         <div class="col-md-9">
-                            <select class="form-control" name="department_id" id="department_id">
+                            <select class="form-control select2" name="department_id" id="department_id" style="width: 100%;">
                                 @foreach ($departments as $department)
                                 <option value="{{$department->id}}">{{$department->name}}</option>
                                 @endforeach

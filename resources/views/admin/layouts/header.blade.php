@@ -20,10 +20,11 @@
 
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/skins/skin-blue.min.css">
-    <!-- DataTables -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css">
 
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{url('/')}}/design/adminlte/bower_components/select2/dist/css/select2.min.css">
     <!-- Bootstrap time Picker -->
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/plugins/timepicker/bootstrap-timepicker.min.css">
     <!-- Google Font -->
@@ -38,6 +39,26 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+    <style>
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #d2d6de;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 34px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: #fff;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #3c8dbc;
+            border: 1px solid #d2d6de;
+        }
+    </style>
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
