@@ -37,7 +37,7 @@
                     <div class="form-group">
                         <label for="project_id" class="col-md-2 control-label">Project: </label>
                         <div class="col-md-9">
-                            <select class="form-control select2" id="project_id" name="project_id" style="width: 100%;">
+                            <select class="form-control" id="project_id" name="project_id">
                                 @foreach ($projects as $project)
                                 <option value="{{$project->id}}">{{$project->title}}</option>
                                 @endforeach
@@ -68,12 +68,12 @@
                     <div class="modal-footer">
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="hidden_id" id="hidden_id" />
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                            Close</button>
                         <button type="submit" class="btn btn-primary" id="action_button" name="action_button"
                             value="Add"><i class="fas fa-save"></i>
                             Save changes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            Close</button>
                     </div>
                 </form>
             </div>

@@ -31,11 +31,13 @@
 @push('scripts')
 
 <script>
+    var department_id = '';
     $(document).ready(function(){
 
         $('#data-table').DataTable({
             processing: true,
             serverSide: true,
+            responsive: true,
             ajax:{
             url: "{{ route('departments.index') }}",
             },
@@ -137,7 +139,7 @@
                     $('#name').val(html.data.name);
                     $('#description').val(html.data.description);
                     $('#hidden_id').val(html.data.id);
-                    $('.modal-title').text("Edit New Department");
+                    $('.modal-title').text("Edit Department");
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
                     $('#departmentModal').modal('show');
@@ -145,7 +147,6 @@
             });
         });
 
-        var department_id;
         $(document).on('click', '.delete', function(){
             department_id = $(this).attr('id');
             $('#confirmModal').modal('show');

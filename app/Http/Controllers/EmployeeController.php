@@ -106,8 +106,10 @@ class EmployeeController extends Controller
             'user_id'               =>  Auth::id()
         );
 
-        $employee = Employee::whereId($request->hidden_id)->update($form_data);
+        $employee = Employee::findOrFail($request->hidden_id);
+        $employee->update($form_data);
         $employee->skills()->sync($request->skill_id);
+
         return response()->json(['success' => 'Data is successfully updated']);
     }
 

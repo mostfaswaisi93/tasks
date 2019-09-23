@@ -55,14 +55,15 @@
                     }, searchable: false, orderable: false
                 },
                 {data: 'title', name: 'title'},
-                {data: 'employees', name: 'employees'},
+                {data: getEmployee, name: 'employees'},
                 {data: 'project', name: 'project'},
                 {data: 'start', name: 'start'},
                 {data: 'end', name: 'end'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false}
             ],
-            "columnDefs": [ {
+            "columnDefs": [
+                {
                     "targets": 6,
                     render: function (data, type, row, meta){
                     var $select = $(`<select class='status form-control'
@@ -77,8 +78,23 @@
                     $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
                     return $select[0].outerHTML
                 }
-            } ],
+            }
+
+
+            ],
         });
+        function getEmployee(data , type,full,meta){
+            var orderType = data.DataType;
+            console.log(data.employees);
+
+          var s   =JSON.parse(data.employees.replace(/&quot;/g,'"'));
+          var f='';
+            s.forEach(element => {
+                f+= "<span class='badge badge-info'>"+element.full_name+"</span> ";
+            });
+
+            return f;
+        }
 
         $('#create_task').click(function(){
             $('.modal-title').text("Add New Task");
@@ -183,7 +199,7 @@
                         }
                     });
                     $('#hidden_id').val(html.data.id);
-                    $('.modal-title').text("Edit New Task");
+                    $('.modal-title').text("Edit Task");
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
                     $('#taskModal').modal('show');
@@ -271,11 +287,10 @@
 
     $('#start').on('dp.change', function(e){
         // console.log(e.timeStamp);
+        console.log(e);
         var new_time =  moment(e.timeStamp).add(20, 'm').format("HH:mm");
         $('body').find('#end').val(new_time);
      });
-
-     $('.select2').select2();
 
 </script>
 

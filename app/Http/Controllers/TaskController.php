@@ -18,8 +18,7 @@ class TaskController extends Controller
 
     public function index()
     {
-        $tasks = Task::with(['project', 'employees'])->select('*')->get();
-
+        $tasks = Task::with(['project', 'employees'])->get();
         if (request()->ajax()) {
             return datatables()->of($tasks)
                 ->addColumn('project', function ($data) {
@@ -36,7 +35,7 @@ class TaskController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        }
+       }
         return view('admin.task.tasks')
             ->with('tasks', Task::get())
             ->with('employees', Employee::get(['id', 'full_name']))
@@ -108,7 +107,9 @@ class TaskController extends Controller
             'end'                   =>  Carbon::createFromFormat('H:i', $request->end)
         );
 
-        Task::whereId($request->hidden_id)->update($form_data);
+        $task = Task::findOrFail($request->hidden_id);
+        $task->update($form_data);
+        $task->employees()->sync($request->employee_id);
 
         return response()->json(['success' => 'Data is successfully updated']);
     }

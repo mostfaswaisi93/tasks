@@ -178,7 +178,7 @@
                     }
                 });
                 $('#hidden_id').val(html.data.id);
-                $('.modal-title').text("Edit New Employee");
+                $('.modal-title').text("Edit Employee");
                 $('#action_button').val("Edit");
                 $('#action').val("Edit");
                 $('#employeeModal').modal('show');
@@ -253,8 +253,6 @@
     function selectStatus(id){
         employee_id = id;
     }
-
-    $('.select2').select2();
 
 </script>
 

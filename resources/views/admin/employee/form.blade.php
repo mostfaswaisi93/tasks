@@ -47,8 +47,7 @@
                     <div class="form-group">
                         <label for="department_id" class="col-md-2 control-label">Department: </label>
                         <div class="col-md-9">
-                            <select class="form-control select2" name="department_id" id="department_id"
-                                style="width: 100%;">
+                            <select class="form-control" name="department_id" id="department_id">
                                 @foreach ($departments as $department)
                                 <option value="{{$department->id}}">{{$department->name}}</option>
                                 @endforeach
@@ -58,9 +57,7 @@
                     <div class="form-group">
                         <label for="skill_id" class="col-md-2 control-label">Skills: </label>
                         <div class="col-md-9">
-                            {{-- <select class="form-control" id="skill_id" name="skill_id[]" multiple> --}}
-                            <select class="form-control select2" id="skill_id" name="skill_id[]" multiple
-                                style="width: 100%;">
+                            <select class="form-control" id="skill_id" name="skill_id[]" multiple>
                                 @foreach ($skills as $skill)
                                 <option value="{{$skill->id}}">{{$skill->name}}</option>
                                 @endforeach
@@ -70,12 +67,12 @@
                     <div class="modal-footer">
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="hidden_id" id="hidden_id" />
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                            Close</button>
                         <button type="submit" class="btn btn-primary" id="action_button" name="action_button"
                             value="Add"><i class="fas fa-save"></i>
                             Save changes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            Close</button>
                     </div>
                 </form>
             </div>

@@ -1,6 +1,6 @@
 <!-- Skill Modal -->
 
-<div  class="modal fade" id="skillModal" role="dialog">
+<div class="modal fade" id="skillModal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,18 +14,18 @@
                     <div class="form-group">
                         <label for="name" class="control-label col-md-2">Name: </label>
                         <div class="col-md-9">
-                            <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name"/>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" />
                         </div>
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="hidden_id" id="hidden_id" />
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                            Close</button>
                         <button type="submit" class="btn btn-primary" id="action_button" name="action_button"
                             value="Add"><i class="fas fa-save"></i>
                             Save changes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            Close</button>
                     </div>
                 </form>
             </div>

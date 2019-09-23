@@ -30,11 +30,13 @@
 @push('scripts')
 
 <script>
+    var skill_id = '';
     $(document).ready(function(){
 
     $('#data-table').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
         ajax:{
         url: "{{ route('skills.index') }}",
         },
@@ -134,7 +136,7 @@
             success:function(html){
                 $('#name').val(html.data.name);
                 $('#hidden_id').val(html.data.id);
-                $('.modal-title').text("Edit New Skill");
+                $('.modal-title').text("Edit Skill");
                 $('#action_button').val("Edit");
                 $('#action').val("Edit");
                 $('#skillModal').modal('show');
@@ -142,7 +144,6 @@
         });
     });
 
-    var skill_id;
     $(document).on('click', '.delete', function(){
         skill_id = $(this).attr('id');
         $('#confirmModal').modal('show');

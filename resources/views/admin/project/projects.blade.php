@@ -159,7 +159,7 @@
                     $('#department_id').val(html.data.department_id);
                     $('#description').val(html.data.description);
                     $('#hidden_id').val(html.data.id);
-                    $('.modal-title').text("Edit New Project");
+                    $('.modal-title').text("Edit Project");
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
                     $('#projectModal').modal('show');
@@ -234,8 +234,6 @@
     function selectStatus(id){
         project_id = id;
     }
-
-    $('.select2').select2();
 
 </script>
 
