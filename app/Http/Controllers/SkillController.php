@@ -74,7 +74,8 @@ class SkillController extends Controller
             'name'        =>  $request->name
         );
 
-        Skill::whereId($request->hidden_id)->update($form_data);
+        $skill = Skill::findOrFail($request->hidden_id);
+        $skill->update($form_data);
 
         return response()->json(['success' => 'Data is successfully updated']);
     }

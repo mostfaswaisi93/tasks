@@ -78,7 +78,8 @@ class DepartmentController extends Controller
             'description'           =>  $request->description
         );
 
-        Department::whereId($request->hidden_id)->update($form_data);
+        $department = Department::findOrFail($request->hidden_id);
+        $department->update($form_data);
 
         return response()->json(['success' => 'Data is successfully updated']);
     }

@@ -91,7 +91,8 @@ class ProjectController extends Controller
             'department_id'             =>  $request->department_id
         );
 
-        Project::whereId($request->hidden_id)->update($form_data);
+        $project = Project::findOrFail($request->hidden_id);
+        $project->update($form_data);
 
         return response()->json(['success' => 'Data is successfully updated']);
     }

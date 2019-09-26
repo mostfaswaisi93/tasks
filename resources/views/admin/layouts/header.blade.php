@@ -27,6 +27,18 @@
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/bower_components/select2/dist/css/select2.min.css">
     <!-- Bootstrap time Picker -->
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/plugins/timepicker/bootstrap-timepicker.min.css">
+
+    <link rel="stylesheet"
+        href="{{url('/')}}/design/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet"
+        href="{{url('/')}}/design/adminlte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{url('/')}}/design/adminlte/plugins/iCheck/all.css">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet"
+        href="{{url('/')}}/design/adminlte/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
+
     <!-- Google Font -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">

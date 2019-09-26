@@ -8,6 +8,64 @@
             <h3 class="box-title">All Tasks</h3>
             <button type="button" name="create_task" id="create_task" class="btn btn-success pull-right"><i
                     class="fa fa-plus"></i> Create New Task</button>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select class="form-control" name="project" id="project"
+                                    onchange="filtetrProject(this);">
+                                    <option value=""> Select Project</option>
+                                    @foreach ($projects as $project)
+                                    <option value="{{$project->id}}">{{$project->title}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select class="form-control" name="filterStatus" id="filterStatus"
+                                    onchange="filtetrStatus(this);">
+                                    <option value=''>Select Status </option>
+                                    <option value='pending'>Pending</option>
+                                    <option value='in_progress'>In Progress</option>
+                                    <option value='done'>Done</option>
+                                    <option value='completed'>Completed</option>
+                                    <option value='cancel'>Cancel</option>
+                                    <option value='late'>Late</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select class="form-control" name="employee" id="employee"
+                                    onchange="filtetrEmployee(this);">
+                                    <option value=""> Select Employee</option>
+                                    @foreach ($employees as $employee)
+                                    <option value="{{$employee->id}}">{{$employee->full_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group date" id="dateFilterSelect" onchange="filtetrDate(this);">
+                                    <input type="text" class="form-control pull-right">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="box-body">
             <table class="table table-bordered table-striped" id="data-table">
@@ -38,7 +96,10 @@
 
 <script>
     var status  = '';
+    var filter_date = '';
     var task_id = '';
+    var project_id= '';
+    var employee_id= '';
     $(document).ready(function(){
 
         $('#data-table').DataTable({
@@ -78,22 +139,17 @@
                     $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
                     return $select[0].outerHTML
                 }
-            }
-
-
-            ],
+            } ],
         });
-        function getEmployee(data , type,full,meta){
+
+        function getEmployee(data , type, full, meta){
             var orderType = data.DataType;
-            console.log(data.employees);
-
-          var s   =JSON.parse(data.employees.replace(/&quot;/g,'"'));
-          var f='';
-            s.forEach(element => {
-                f+= "<span class='badge badge-info'>"+element.full_name+"</span> ";
+            var nameTage = JSON.parse(data.employees.replace(/&quot;/g,'"'));
+            var fName = '';
+            nameTage.forEach(element => {
+                fName+= "<span class='badge badge-primary'>"+element.full_name+"</span> ";
             });
-
-            return f;
+            return fName;
         }
 
         $('#create_task').click(function(){
@@ -179,6 +235,22 @@
                 url:"/admin/tasks/"+id+"/edit",
                 dataType:"json",
                 success:function(html){
+                    function startConverter(){
+                    var a = new Date(html.data.start);
+                    var hour = a.getHours();
+                    var min = a.getMinutes();
+                    var time = hour + ':' + min;
+                    return time;
+                    }
+
+                    function endConverter(){
+                    var a = new Date(html.data.end);
+                    var hour = a.getHours();
+                    var min = a.getMinutes();
+                    var time = hour + ':' + min;
+                    return time;
+                    }
+
                     console.log(html);
                     var employees = html.data.employees;
                     var employee_ids = _.map(employees, 'id');
@@ -186,8 +258,8 @@
                     $('#description').val(html.data.description);
                     $('#project_id').val(html.data.project_id);
                     $('#notes').val(html.data.notes);
-                    $('#start').val(html.data.start);
-                    $('#end').val(html.data.end);
+                    $('#start').val(startConverter(0));
+                    $('#end').val(endConverter(0));
                     $('#employee_id > option').prop('selected', false);
                     $('#employee_id > option').each(function(){
                         var item = this;
@@ -275,22 +347,50 @@
         task_id = id;
     }
 
+    function filtetrProject(id=null){
+        project_id= id.value;
+        $('#data-table').DataTable().ajax.url("{{ route('tasks.index') }}"+'?project_id='+project_id+'&employee_id='+employee_id+'&status='+status+'&type=filter').load();
+    }
+
+    function filtetrEmployee(emp_id=null){
+        employee_id= emp_id.value;
+        $('#data-table').DataTable().ajax.url("{{ route('tasks.index') }}"+'?project_id='+project_id+'&employee_id='+employee_id+'&status='+status+'&type=filter').load();
+    }
+
+    function filtetrStatus(status_f=null){
+        status= status_f.value;
+        $('#data-table').DataTable().ajax.url("{{ route('tasks.index') }}"+'?project_id='+project_id+'&employee_id='+employee_id+'&status='+status+'&type=filter').load();
+    }
+
+    function filtetrDate(filTime=null){
+        filter_date= filTime.value;
+        $('#data-table').DataTable().ajax.url("{{ route('tasks.index') }}"+'?project_id='+project_id+'&employee_id='+employee_id+'&status='+status+'&type=filter').load();
+    }
+
     var dateNow = new Date();
-    $('#timepickerStart').timepicker({
+
+    $('.timepickerStart').timepicker({
         format: 'HH:mm',
-        defaultDate:dateNow
+        defaultDate:dateNow,
+        showMeridian: false
     });
-    $('#timepickerEnd').timepicker({
+
+    $('.timepickerEnd').timepicker({
         format: 'HH:mm',
-        defaultDate:dateNow
+        defaultDate:dateNow,
+        showMeridian: false
     });
 
     $('#start').on('dp.change', function(e){
         // console.log(e.timeStamp);
-        console.log(e);
         var new_time =  moment(e.timeStamp).add(20, 'm').format("HH:mm");
         $('body').find('#end').val(new_time);
-     });
+    });
+
+    $('#dateFilterSelect').datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd'
+    });
 
 </script>
 

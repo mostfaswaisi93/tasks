@@ -18,8 +18,31 @@ class TaskController extends Controller
 
     public function index()
     {
-        $tasks = Task::with(['project', 'employees'])->get();
+        $tasks = Task::with(['project', 'employees']);
+        $project_id = request()->get('project_id');
+        $employee_id = request()->get('employee_id');
+        $status = request()->get('status');
+        $date = request()->get('DATE(start)');
+
         if (request()->ajax()) {
+            if (isset($project_id))
+                $tasks->whereHas('project', function ($q) use ($project_id) {
+                    $q->where('id', $project_id);
+                });
+
+            if (isset($employee_id))
+                $tasks->whereHas('employees', function ($q) use ($employee_id) {
+                    $q->where('employees.id', $employee_id);
+                });
+
+            if (isset($status))
+                $tasks->where('status', $status);
+
+            if (isset($date))
+            // $tasks->where('start', $date);
+            $tasks->where('start', '<=', $date);
+
+            $tasks = $tasks->get();
             return datatables()->of($tasks)
                 ->addColumn('project', function ($data) {
                     return $data->project->title;
@@ -35,7 +58,7 @@ class TaskController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-       }
+        }
         return view('admin.task.tasks')
             ->with('tasks', Task::get())
             ->with('employees', Employee::get(['id', 'full_name']))
@@ -118,6 +141,7 @@ class TaskController extends Controller
     {
         $data = Task::findOrFail($id);
         $data->delete();
+        $data->employees()->detach();
     }
 
     public function updateStatus(Request $request, $id)
