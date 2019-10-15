@@ -7,13 +7,13 @@
         <div class="box-header">
             <h3 class="box-title">All Employees</h3>
             <button type="button" name="create_employee" id="create_employee" class="btn btn-success pull-right"><i
-                    class="fa fa-plus"></i> Create New Employee</button>
+                    class="fa fa-plus"></i> Create New</button>
         </div>
         <div class="box-body">
             <table class="table table-bordered table-striped" id="data-table">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>#</th>
                         <th>Full Name</th>
                         <th>Department</th>
                         <th>Job Title</th>
@@ -52,9 +52,9 @@
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }, searchable: false, orderable: false
             },
-            {data: 'full_name', name: 'full_name'},
+            {data: 'fullName', name: 'fullName'},
             {data: 'department', name: 'department'},
-            {data: 'job_title', name: 'job_title'},
+            {data: 'jobTitle', name: 'jobTitle'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false}
         ],
@@ -161,11 +161,11 @@
                 console.log(html);
                 var skills = html.data.skills;
                 var skill_ids = _.map(skills, 'id');
-                $('#full_name').val(html.data.full_name);
+                $('#fullName').val(html.data.fullName);
                 $('#email').val(html.data.email);
                 $('#phone').val(html.data.phone);
                 $('#address').val(html.data.address);
-                $('#job_title').val(html.data.job_title);
+                $('#jobTitle').val(html.data.jobTitle);
                 $('#department_id').val(html.data.department_id);
                 $('#skill_id > option').prop('selected', false);
                 $('#skill_id > option').each(function(){

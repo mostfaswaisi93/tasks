@@ -6,14 +6,14 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">All Skills</h3>
-            <button type="button" name="create_skill" id="create_skill" class="btn btn-success pull-right"><i
-                    class="fa fa-plus"></i> Create New Skill</button>
+            <button type="button" name="create_skill" id="create_skill" class="btn btn-success pull-right">
+                <i class="fa fa-plus"></i> Create New</button>
         </div>
         <div class="box-body">
             <table class="table table-bordered table-striped" id="data-table">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>#</th>
                         <th>Name</th>
                         <th>Action</th>
                     </tr>
@@ -76,18 +76,19 @@
                 var html = '';
                 if(data.errors)
             {
-            html = '<div class="alert alert-danger">';
-            for(var count = 0; count < data.errors.length; count++)
-            {
-                html += '<p>' + data.errors[count] + '</p>';
-            }
-            html += '</div>';
+                html = '<div class="alert alert-danger">';
+                for(var count = 0; count < data.errors.length; count++)
+                    {
+                        html += '<p>' + data.errors[count] + '</p>';
+                    }
+                html += '</div>';
             }
             if(data.success)
             {
                 $('#skillForm')[0].reset();
                 $('#data-table').DataTable().ajax.reload();
                 $('#skillModal').modal('hide');
+                toastr.success('Added Done!', 'Success!');
             }
                 $('#form_result').html(html);
             }
@@ -105,23 +106,24 @@
             dataType:"json",
             success:function(data)
             {
-            var html = '';
-            if(data.errors)
+                var html = '';
+                if(data.errors)
             {
-            html = '<div class="alert alert-danger">';
-            for(var count = 0; count < data.errors.length; count++)
-            {
-            html += '<p>' + data.errors[count] + '</p>';
-            }
-            html += '</div>';
+                html = '<div class="alert alert-danger">';
+                for(var count = 0; count < data.errors.length; count++)
+                {
+                    html += '<p>' + data.errors[count] + '</p>';
+                }
+                html += '</div>';
             }
             if(data.success)
             {
-            $('#skillForm')[0].reset();
-            $('#data-table').DataTable().ajax.reload();
-            $('#skillModal').modal('hide');
+                $('#skillForm')[0].reset();
+                $('#data-table').DataTable().ajax.reload();
+                $('#skillModal').modal('hide');
+                toastr.success('Edited Done!', 'Success!');
             }
-            $('#form_result').html(html);
+                $('#form_result').html(html);
             }
             });
         }
@@ -159,6 +161,7 @@
                     $('#confirmModal').modal('hide');
                     $('#data-table').DataTable().ajax.reload();
                     $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                    toastr.success('Deleted Done!', 'Success!');
                 },
                 error: function (data) {
                     console.log('error:', data);
@@ -167,6 +170,7 @@
         });
     });
 });
+
 </script>
 
 @endpush

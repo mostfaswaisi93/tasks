@@ -69,6 +69,29 @@
             background-color: #3c8dbc;
             border: 1px solid #d2d6de;
         }
+
+        .box-header {
+            padding-top: 40px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .box-header .box-title {
+            font-size: 24px;
+        }
+
+        .form-horizontal .control-label {
+            text-align: left;
+        }
+
+        .showStyle {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            word-break: break-word;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
     </style>
 
 </head>

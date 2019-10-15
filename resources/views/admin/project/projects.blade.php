@@ -7,13 +7,13 @@
         <div class="box-header">
             <h3 class="box-title">All Projects</h3>
             <button type="button" name="create_project" id="create_project" class="btn btn-success pull-right"><i
-                    class="fa fa-plus"></i> Create New Project</button>
+                    class="fa fa-plus"></i> Create New</button>
         </div>
         <div class="box-body">
             <table class="table table-bordered table-striped" id="data-table">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>#</th>
                         <th>Title</th>
                         <th>Department</th>
                         <th>Status</th>
@@ -234,6 +234,8 @@
     function selectStatus(id){
         project_id = id;
     }
+
+    $('.select2').select2();
 
 </script>
 

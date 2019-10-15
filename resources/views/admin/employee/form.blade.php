@@ -12,9 +12,9 @@
                 <form method="post" id="employeeForm" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="full_name" class="control-label col-md-2">Full Name: </label>
+                        <label for="fullName" class="control-label col-md-2">Full Name: </label>
                         <div class="col-md-9">
-                            <input type="text" name="full_name" id="full_name" class="form-control"
+                            <input type="text" name="fullName" id="fullName" class="form-control"
                                 placeholder="Enter Full Name" />
                         </div>
                     </div>
@@ -38,9 +38,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="job_title" class="col-md-2 control-label">Job Title: </label>
+                        <label for="jobTitle" class="col-md-2 control-label">Job Title: </label>
                         <div class="col-md-9">
-                            <input class="form-control" id="job_title" name="job_title" type="text"
+                            <input class="form-control" id="jobTitle" name="jobTitle" type="text"
                                 placeholder="Enter Job Title" />
                         </div>
                     </div>

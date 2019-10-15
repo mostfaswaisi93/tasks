@@ -47,6 +47,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/js/all.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.13.0/basic/ckeditor.js"></script>
 
 @stack('scripts')
 

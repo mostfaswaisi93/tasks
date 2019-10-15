@@ -7,7 +7,7 @@
         <div class="box-header">
             <h3 class="box-title">All Tasks</h3>
             <button type="button" name="create_task" id="create_task" class="btn btn-success pull-right"><i
-                    class="fa fa-plus"></i> Create New Task</button>
+                    class="fa fa-plus"></i> Create New</button>
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
@@ -71,7 +71,7 @@
             <table class="table table-bordered table-striped" id="data-table">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>#</th>
                         <th>Title</th>
                         <th>Employee</th>
                         <th>Project</th>

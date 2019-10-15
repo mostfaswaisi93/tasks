@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label for="description" class="col-md-2 control-label">Description: </label>
                         <div class="col-md-9">
-                            <textarea class="form-control" name="description" cols="50" rows="10" id="description"
+                            <textarea cols="80" id="description" name="description" rows="10"
                                 placeholder="Enter Description"></textarea>
                         </div>
                     </div>
@@ -33,6 +33,39 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">
                             <i class="fa fa-times" aria-hidden="true"></i>
                             Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Show Department Modal -->
+
+<div class="modal fade" id="showModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Show Department</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="showName" class="control-label col-md-2">Name: </label>
+                        <div class="col-md-9">
+                            <div id="showName" name="name" class="showStyle"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="showDescription" class="col-md-2 control-label">Description: </label>
+                        <div class="col-md-9">
+                            <div id="showDescription" name="description" class="showStyle"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-success"><i class="fas fa-thumbs-up"></i>
+                            OK</button>
                     </div>
                 </form>
             </div>

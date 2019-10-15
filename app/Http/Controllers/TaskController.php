@@ -39,8 +39,8 @@ class TaskController extends Controller
                 $tasks->where('status', $status);
 
             if (isset($date))
-            // $tasks->where('start', $date);
-            $tasks->where('start', '<=', $date);
+                // $tasks->where('start', $date);
+                $tasks->where('start', '<=', $date);
 
             $tasks = $tasks->get();
             return datatables()->of($tasks)
@@ -52,6 +52,8 @@ class TaskController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
+                    $button .= '&nbsp;&nbsp;';
+                    $button .= '<button type="button" name="show" id="' . $data->id . '" class="showBtn btn btn-info btn-sm"><i class="fa fa-eye"></i></button>';
                     $button .= '&nbsp;&nbsp;';
                     $button .= '<button type="button" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>';
                     return $button;
