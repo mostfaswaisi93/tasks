@@ -54,15 +54,17 @@ class ProjectController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
-        $form_data = array(
-            'title'                     =>  $request->title,
-            'description'               =>  $request->description,
-            'department_id'             =>  $request->department_id
-        );
-
-        Project::create($form_data);
-
+        Project::create($request->all());
         return response()->json(['success' => 'Data Added successfully.']);
+    }
+
+    public function show($id)
+    {
+        if (request()->ajax()) {
+            $data   = Project::with('department')->findOrFail($id);
+            $data->department->name;
+            return response()->json(['data' => $data]);
+        }
     }
 
     public function edit($id)
@@ -87,15 +89,8 @@ class ProjectController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
-        $form_data = array(
-            'title'                     =>  $request->title,
-            'description'               =>  $request->description,
-            'department_id'             =>  $request->department_id
-        );
-
         $project = Project::findOrFail($request->hidden_id);
-        $project->update($form_data);
-
+        $project->update($request->all());
         return response()->json(['success' => 'Data is successfully updated']);
     }
 

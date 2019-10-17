@@ -44,13 +44,7 @@ class DepartmentController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
-        $form_data = array(
-            'name'                  =>  $request->name,
-            'description'           =>  $request->description
-        );
-
-        Department::create($form_data);
-
+        Department::create($request->all());
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
@@ -83,14 +77,8 @@ class DepartmentController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
-        $form_data = array(
-            'name'                  =>  $request->name,
-            'description'           =>  $request->description
-        );
-
         $department = Department::findOrFail($request->hidden_id);
-        $department->update($form_data);
-
+        $department->update($request->all());
         return response()->json(['success' => 'Data is successfully updated']);
     }
 

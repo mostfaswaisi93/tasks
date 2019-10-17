@@ -42,7 +42,7 @@
                                     onchange="filtetrEmployee(this);">
                                     <option value=""> Select Employee</option>
                                     @foreach ($employees as $employee)
-                                    <option value="{{$employee->id}}">{{$employee->full_name}}</option>
+                                    <option value="{{$employee->id}}">{{$employee->fullName}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -147,7 +147,7 @@
             var nameTage = JSON.parse(data.employees.replace(/&quot;/g,'"'));
             var fName = '';
             nameTage.forEach(element => {
-                fName+= "<span class='badge badge-primary'>"+element.full_name+"</span> ";
+                fName+= "<span class='badge badge-primary'>"+element.fullName+"</span> ";
             });
             return fName;
         }

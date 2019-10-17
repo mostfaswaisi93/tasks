@@ -17,7 +17,7 @@
                         <th>Title</th>
                         <th>Department</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th width="15%">Action</th>
                     </tr>
                 </thead>
             </table>
@@ -59,12 +59,12 @@
                     render: function (data, type, row, meta){
                     var $select = $(`<select class='status form-control'
                     id='status' onchange=selectStatus(${row.id})>
-                    <option value='pending'>Pending</option>
-                    <option value='in_progress'>In Progress</option>
-                    <option value='done'>Done</option>
-                    <option value='completed'>Completed</option>
-                    <option value='cancel'>Cancel</option>
-                    <option value='late'>Late</option>
+                    <option value='Pending'>Pending</option>
+                    <option value='InProgress'>In Progress</option>
+                    <option value='Done'>Done</option>
+                    <option value='Completed'>Completed</option>
+                    <option value='Cancel'>Cancel</option>
+                    <option value='Late'>Late</option>
                     </select>`);
                     $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
                     return $select[0].outerHTML
@@ -76,6 +76,8 @@
             $('.modal-title').text("Add New Project");
                 $('#action_button').val("Add");
                 $('#projectForm').trigger("reset");
+                $('.select2').val('').trigger('change');
+                CKEDITOR.instances['description'].setData('');
                 $('#action').val("Add");
                 $('#projectModal').modal('show');
         });
@@ -84,10 +86,14 @@
             event.preventDefault();
             if($('#action').val() == 'Add')
             {
+                var formData = new FormData(this);
+                var descriptionValue = '';
+                descriptionValue = CKEDITOR.instances['description'].getData();
+                formData.append('description', descriptionValue);
             $.ajax({
                 url:"{{ route('projects.store') }}",
                 method:"POST",
-                data: new FormData(this),
+                data: formData,
                 contentType: false,
                 cache:false,
                 processData: false,
@@ -109,6 +115,7 @@
                     $('#projectForm')[0].reset();
                     $('#data-table').DataTable().ajax.reload();
                     $('#projectModal').modal('hide');
+                    toastr.success('Added Done!', 'Success!');
                 }
                     $('#form_result').html(html);
                 }
@@ -116,10 +123,14 @@
         }
         if($('#action').val() == "Edit")
         {
+                var formData = new FormData(this);
+                var descriptionValue = '';
+                descriptionValue = CKEDITOR.instances['description'].getData();
+                formData.append('description', descriptionValue);
             $.ajax({
                 url:"{{ route('projects.update') }}",
                 method:"POST",
-                data:new FormData(this),
+                data: formData,
                 contentType: false,
                 cache: false,
                 processData: false,
@@ -141,6 +152,7 @@
                 $('#projectForm')[0].reset();
                 $('#data-table').DataTable().ajax.reload();
                 $('#projectModal').modal('hide');
+                toastr.success('Edited Done!', 'Success!');
                 }
                 $('#form_result').html(html);
                 }
@@ -156,13 +168,29 @@
                 dataType:"json",
                 success:function(html){
                     $('#title').val(html.data.title);
-                    $('#department_id').val(html.data.department_id);
-                    $('#description').val(html.data.description);
+                    $('#department_id').val(html.data.department_id).trigger('change');
+                    CKEDITOR.instances['description'].setData(html.data.description);
                     $('#hidden_id').val(html.data.id);
                     $('.modal-title').text("Edit Project");
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
                     $('#projectModal').modal('show');
+                }
+            });
+        });
+
+        $(document).on('click', '.showBtn', function(){
+            project_id = $(this).attr('id');
+            $.ajax({
+                url:"/admin/projects/"+project_id,
+                dataType:"json",
+                success:function(html){
+                    $('#showTitle').html(html.data.title);
+                    $('#showDepartment').html(html.data.department.name);
+                    $('#showDescription').html(html.data.description);
+                    $('#showStatus').html(html.data.status);
+                    $('#hidden_id').val(html.data.id);
+                    $('#showModal').modal('show');
                 }
             });
         });
@@ -182,6 +210,7 @@
                         $('#confirmModal').modal('hide');
                         $('#data-table').DataTable().ajax.reload();
                         $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                        toastr.success('Deleted Done!', 'Success!');
                     },
                     error: function (data) {
                         console.log('error:', data);
@@ -197,7 +226,6 @@
             }else{
                 toastr.success('Status changed!', 'Success!')
             }
-            console.log(project_id)
             $.ajax({
                 url:"projects/updateStatus/"+project_id+"?status="+status_project,
                 headers: {
@@ -236,6 +264,10 @@
     }
 
     $('.select2').select2();
+
+    CKEDITOR.replace('description', {
+      height: 150,
+    });
 
 </script>
 

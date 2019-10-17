@@ -21,7 +21,7 @@ class CreateTasksTable extends Migration
             $table->string('notes');
             $table->dateTime('start');
             $table->dateTime('end');
-            $table->enum('status', ['pending', 'in_progress', 'done', 'completed', 'cancel', 'late'])->default('pending');
+            $table->enum('status', ['Pending', 'InProgress', 'Done', 'Completed', 'Cancel', 'late'])->default('Pending');
             $table->timestamps();
         });
     }

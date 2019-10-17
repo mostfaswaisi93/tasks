@@ -41,12 +41,7 @@ class SkillController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
-        $form_data = array(
-            'name'        =>  $request->name
-        );
-
-        Skill::create($form_data);
-
+        Skill::create($request->all());
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
@@ -70,13 +65,8 @@ class SkillController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
-        $form_data = array(
-            'name'        =>  $request->name
-        );
-
         $skill = Skill::findOrFail($request->hidden_id);
-        $skill->update($form_data);
-
+        $skill->update($request->all());
         return response()->json(['success' => 'Data is successfully updated']);
     }
 

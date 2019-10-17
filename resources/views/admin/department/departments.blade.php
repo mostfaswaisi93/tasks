@@ -64,10 +64,14 @@
             event.preventDefault();
             if($('#action').val() == 'Add')
             {
+                var formData = new FormData(this);
+                var descriptionValue = '';
+                descriptionValue = CKEDITOR.instances['description'].getData();
+                formData.append('description', descriptionValue);
             $.ajax({
                 url:"{{ route('departments.store') }}",
                 method:"POST",
-                data: new FormData(this),
+                data: formData,
                 contentType: false,
                 cache:false,
                 processData: false,
@@ -97,10 +101,14 @@
         }
         if($('#action').val() == "Edit")
         {
-            $.ajax({
+            var formData = new FormData(this);
+            var descriptionValue = '';
+            descriptionValue = CKEDITOR.instances['description'].getData();
+            formData.append('description', descriptionValue);
+        $.ajax({
                 url:"{{ route('departments.update') }}",
                 method:"POST",
-                data:new FormData(this),
+                data: formData,
                 contentType: false,
                 cache: false,
                 processData: false,
@@ -148,11 +156,6 @@
             });
         });
 
-        $(document).on('click', '.delete', function(){
-            department_id = $(this).attr('id');
-            $('#confirmModal').modal('show');
-        });
-
         $(document).on('click', '.showBtn', function(){
             department_id = $(this).attr('id');
             $.ajax({
@@ -165,6 +168,11 @@
                     $('#showModal').modal('show');
                 }
             });
+        });
+
+        $(document).on('click', '.delete', function(){
+            department_id = $(this).attr('id');
+            $('#confirmModal').modal('show');
         });
 
         $('#ok_button').click(function(){

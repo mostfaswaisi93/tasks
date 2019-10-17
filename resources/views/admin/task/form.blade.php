@@ -29,7 +29,7 @@
                         <div class="col-md-9">
                             <select class="form-control" id="employee_id" name="employee_id[]" multiple>
                                 @foreach ($employees as $employee)
-                                <option value="{{$employee->id}}">{{$employee->full_name}}</option>
+                                <option value="{{$employee->id}}">{{$employee->fullName}}</option>
                                 @endforeach
                             </select>
                         </div>

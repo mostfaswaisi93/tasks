@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label for="department_id" class="col-md-2 control-label">Department: </label>
                         <div class="col-md-9">
-                            <select class="form-control " name="department_id" id="department_id"
+                            <select class="form-control select2" name="department_id" id="department_id"
                                 style="width: 100%;">
                                 <option value=""> -- Select Department -- </option>
                                 @foreach ($departments as $department)
@@ -45,6 +45,51 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">
                             <i class="fa fa-times" aria-hidden="true"></i>
                             Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Show Project Modal -->
+
+<div class="modal fade" id="showModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Show Project</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="showTitle" class="control-label col-md-2">Title: </label>
+                        <div class="col-md-9">
+                            <div id="showTitle" name="title" class="showStyle"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="showDepartment" class="control-label col-md-2">Department: </label>
+                        <div class="col-md-9">
+                            <div id="showDepartment" name="department" class="showStyle"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="showDescription" class="col-md-2 control-label">Description: </label>
+                        <div class="col-md-9">
+                            <div id="showDescription" name="description" class="showStyle"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="showStatus" class="col-md-2 control-label">Status: </label>
+                        <div class="col-md-9">
+                            <div id="showStatus" name="status" class="showStyle"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-success"><i class="fas fa-thumbs-up"></i>
+                            OK</button>
                     </div>
                 </form>
             </div>

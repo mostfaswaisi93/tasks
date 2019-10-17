@@ -15,7 +15,7 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Action</th>
+                        <th width="15%">Action</th>
                     </tr>
                 </thead>
             </table>

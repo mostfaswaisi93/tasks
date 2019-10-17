@@ -16,9 +16,9 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->text('description');
+            $table->longText('description');
             $table->integer('department_id');
-            $table->enum('status', ['pending', 'in_progress', 'done', 'completed', 'cancel', 'late'])->default('pending');
+            $table->enum('status', ['Pending', 'InProgress', 'Done', 'Completed', 'Cancel', 'Late'])->default('Pending');
             $table->timestamps();
         });
     }

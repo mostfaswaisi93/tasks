@@ -18,7 +18,7 @@
                         <th>Department</th>
                         <th>Job Title</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th width="15%">Action</th>
                     </tr>
                 </thead>
             </table>
@@ -63,11 +63,11 @@
                 render: function (data, type, row, meta){
                 var $select = $(`<select class='status form-control'
                 id='status' onchange=selectStatus(${row.id})>
-                <option value='pending'>Pending</option>
-                <option value='in_progress'>In Progress</option>
-                <option value='completed'>Completed</option>
-                <option value='inactive'>In Active</option>
-                <option value='leave'>Leave</option>
+                <option value='Pending'>Pending</option>
+                <option value='InProgress'>In Progress</option>
+                <option value='Completed'>Completed</option>
+                <option value='InActive'>In Active</option>
+                <option value='Leave'>Leave</option>
                 </select>`);
                 $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
                 return $select[0].outerHTML
@@ -79,6 +79,8 @@
         $('.modal-title').text("Add New Employee");
             $('#action_button').val("Add");
             $('#employeeForm').trigger("reset");
+            $('.select2').val('').trigger('change');
+
             $('#action').val("Add");
             $('#employeeModal').modal('show');
     });
@@ -87,10 +89,11 @@
         event.preventDefault();
         if($('#action').val() == 'Add')
         {
+            var formData = new FormData(this);
         $.ajax({
             url:"{{ route('employees.store') }}",
             method:"POST",
-            data: new FormData(this),
+            data: formData,
             contentType: false,
             cache:false,
             processData: false,
@@ -112,6 +115,7 @@
                 $('#employeeForm')[0].reset();
                 $('#data-table').DataTable().ajax.reload();
                 $('#employeeModal').modal('hide');
+                toastr.success('Added Done!', 'Success!');
             }
                 $('#form_result').html(html);
             }
@@ -119,10 +123,11 @@
     }
     if($('#action').val() == "Edit")
     {
+        var formData = new FormData(this);
         $.ajax({
             url:"{{ route('employees.update') }}",
             method:"POST",
-            data:new FormData(this),
+            data: formData,
             contentType: false,
             cache: false,
             processData: false,
@@ -144,6 +149,7 @@
             $('#employeeForm')[0].reset();
             $('#data-table').DataTable().ajax.reload();
             $('#employeeModal').modal('hide');
+            toastr.success('Edited Done!', 'Success!');
             }
             $('#form_result').html(html);
             }
@@ -166,7 +172,7 @@
                 $('#phone').val(html.data.phone);
                 $('#address').val(html.data.address);
                 $('#jobTitle').val(html.data.jobTitle);
-                $('#department_id').val(html.data.department_id);
+                $('#department_id').val(html.data.department_id).trigger('change');
                 $('#skill_id > option').prop('selected', false);
                 $('#skill_id > option').each(function(){
                     var item = this;
@@ -186,6 +192,27 @@
         });
     });
 
+    $(document).on('click', '.showBtn', function(){
+        project_id = $(this).attr('id');
+        $.ajax({
+            url:"/admin/employees/"+project_id,
+            dataType:"json",
+            success:function(html){
+                console.log(html);
+                $('#showFullName').html(html.data.fullName);
+                $('#showEmail').html(html.data.email);
+                $('#showPhone').html(html.data.phone);
+                $('#showAdress').html(html.data.address);
+                $('#showJobTitle').html(html.data.jobTitle);
+                $('#showDepartment').html(html.data.department.name);
+                $('#showSkills').html(html.data.skills.name);
+                $('#showStatus').html(html.data.status);
+                $('#hidden_id').val(html.data.id);
+                $('#showModal').modal('show');
+            }
+        });
+    });
+
     $(document).on('click', '.delete', function(){
         employee_id = $(this).attr('id');
         $('#confirmModal').modal('show');
@@ -201,6 +228,7 @@
                     $('#confirmModal').modal('hide');
                     $('#data-table').DataTable().ajax.reload();
                     $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                    toastr.success('Deleted Done!', 'Success!');
                 },
                 error: function (data) {
                     console.log('error:', data);
@@ -216,7 +244,6 @@
             }else{
                 toastr.success('Status changed!', 'Success!')
             }
-            console.log(employee_id)
             $.ajax({
                 url:"employees/updateStatus/"+employee_id+"?status="+status_employee,
                 headers: {
@@ -253,6 +280,8 @@
     function selectStatus(id){
         employee_id = id;
     }
+
+    $('.select2').select2();
 
 </script>
 

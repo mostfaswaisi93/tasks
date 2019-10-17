@@ -63,7 +63,7 @@ class TaskController extends Controller
         }
         return view('admin.task.tasks')
             ->with('tasks', Task::get())
-            ->with('employees', Employee::get(['id', 'full_name']))
+            ->with('employees', Employee::get(['id', 'fullName']))
             ->with('projects', Project::get(['id', 'title']));
     }
 
@@ -148,10 +148,10 @@ class TaskController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $task   = Task::find($id);
+        $task       = Task::find($id);
         $status     = $request->get('status');
         $task->status = $status;
-        $task   = $task->save();
+        $task       = $task->save();
 
         if ($task) {
             return response(['success' => TRUE, "message" => 'Done']);

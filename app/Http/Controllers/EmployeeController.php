@@ -28,6 +28,8 @@ class EmployeeController extends Controller
                 ->addColumn('action', function ($data) {
                     $button = '<button type="button" name="edit" id="' . $data->id . '" class="edit btn btn-primary btn-sm"><i class="far fa-edit"></i></button>';
                     $button .= '&nbsp;&nbsp;';
+                    $button .= '<button type="button" name="show" id="' . $data->id . '" class="showBtn btn btn-info btn-sm"><i class="fa fa-eye"></i></button>';
+                    $button .= '&nbsp;&nbsp;';
                     $button .= '<button type="button" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>';
                     return $button;
                 })
@@ -42,11 +44,11 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $rules = array(
-            'full_name'             => 'required',
+            'fullName'              => 'required',
             'email'                 => 'required|email',
             'phone'                 => 'required|min:8|numeric',
             'address'               => 'required',
-            'job_title'             => 'required',
+            'jobTitle'              => 'required',
             'department_id'         => 'required'
         );
 
@@ -57,11 +59,11 @@ class EmployeeController extends Controller
         }
 
         $form_data = array(
-            'full_name'             =>  $request->full_name,
+            'fullName'              =>  $request->fullName,
             'email'                 =>  $request->email,
             'phone'                 =>  $request->phone,
             'address'               =>  $request->address,
-            'job_title'             =>  $request->job_title,
+            'jobTitle'              =>  $request->jobTitle,
             'department_id'         =>  $request->department_id,
             'user_id'               =>  Auth::id()
         );
@@ -69,6 +71,15 @@ class EmployeeController extends Controller
         Employee::create($form_data)->skills()->attach($request->skill_id);
 
         return response()->json(['success' => 'Data Added successfully.']);
+    }
+
+    public function show($id)
+    {
+        if (request()->ajax()) {
+            $data = Employee::with(['skills', 'department'])->findOrFail($id);
+            $data->department->name;
+            return response()->json(['data' => $data]);
+        }
     }
 
     public function edit($id)
@@ -82,11 +93,11 @@ class EmployeeController extends Controller
     public function update(Request $request)
     {
         $rules = array(
-            'full_name'             => 'required',
+            'fullName'              => 'required',
             'email'                 => 'required|email',
             'phone'                 => 'required|min:8|numeric',
             'address'               => 'required',
-            'job_title'             => 'required',
+            'jobTitle'              => 'required',
             'department_id'         => 'required'
         );
 
@@ -97,11 +108,11 @@ class EmployeeController extends Controller
         }
 
         $form_data = array(
-            'full_name'             =>  $request->full_name,
+            'fullName'              =>  $request->fullName,
             'email'                 =>  $request->email,
             'phone'                 =>  $request->phone,
             'address'               =>  $request->address,
-            'job_title'             =>  $request->job_title,
+            'jobTitle'              =>  $request->jobTitle,
             'department_id'         =>  $request->department_id,
             'user_id'               =>  Auth::id()
         );
