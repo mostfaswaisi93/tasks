@@ -64,9 +64,9 @@
                 var $select = $(`<select class='status form-control'
                 id='status' onchange=selectStatus(${row.id})>
                 <option value='Pending'>Pending</option>
-                <option value='InProgress'>In Progress</option>
+                <option value='In Progress'>In Progress</option>
                 <option value='Completed'>Completed</option>
-                <option value='InActive'>In Active</option>
+                <option value='In Active'>In Active</option>
                 <option value='Leave'>Leave</option>
                 </select>`);
                 $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
@@ -80,7 +80,7 @@
             $('#action_button').val("Add");
             $('#employeeForm').trigger("reset");
             $('.select2').val('').trigger('change');
-
+            $('.selectSkill').val('').trigger('change');
             $('#action').val("Add");
             $('#employeeModal').modal('show');
     });
@@ -164,7 +164,6 @@
             url:"/admin/employees/"+id+"/edit",
             dataType:"json",
             success:function(html){
-                console.log(html);
                 var skills = html.data.skills;
                 var skill_ids = _.map(skills, 'id');
                 $('#fullName').val(html.data.fullName);
@@ -177,8 +176,7 @@
                 $('#skill_id > option').each(function(){
                     var item = this;
                     if(skill_ids.indexOf(parseInt(item.value)) > -1){
-                        console.log('selected',true);
-                        $(this).prop('selected', true);
+                        $(this).prop('selected', true).trigger('change');
                     }else{
                         console.log('selected',false);
                     }
@@ -198,16 +196,26 @@
             url:"/admin/employees/"+project_id,
             dataType:"json",
             success:function(html){
-                console.log(html);
+                var skills = html.data.skills;
+                var skill_ids = _.map(skills, 'id');
                 $('#showFullName').html(html.data.fullName);
                 $('#showEmail').html(html.data.email);
                 $('#showPhone').html(html.data.phone);
                 $('#showAdress').html(html.data.address);
                 $('#showJobTitle').html(html.data.jobTitle);
                 $('#showDepartment').html(html.data.department.name);
-                $('#showSkills').html(html.data.skills.name);
+                $('#showSkills > option').prop('selected', false);
+                $('#showSkills > option').each(function(){
+                    var item = this;
+                    if(skill_ids.indexOf(parseInt(item.value)) > -1){
+                        $(this).prop('selected', true).trigger('change');
+                    }else{
+                        console.log('selected',false);
+                    }
+                });
                 $('#showStatus').html(html.data.status);
                 $('#hidden_id').val(html.data.id);
+                $('.modal-title').text("Show Employee");
                 $('#showModal').modal('show');
             }
         });
@@ -281,7 +289,15 @@
         employee_id = id;
     }
 
-    $('.select2').select2();
+    $('.select2').select2({
+        placeholder: "Select Department"
+    });
+    $(".selectSkill").select2({
+        placeholder: "Select Skills",
+        allowClear: true
+    });
+    $(".selectSkills").select2();
+    $('.selectSkills').prop("disabled", true);
 
 </script>
 

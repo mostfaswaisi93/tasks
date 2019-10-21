@@ -16,12 +16,12 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->string('description');
+            $table->longText('description');
             $table->integer('project_id');
-            $table->string('notes');
+            $table->longText('notes');
             $table->dateTime('start');
             $table->dateTime('end');
-            $table->enum('status', ['Pending', 'InProgress', 'Done', 'Completed', 'Cancel', 'late'])->default('Pending');
+            $table->enum('status', ['Pending', 'In Progress', 'Done', 'Completed', 'Cancel', 'Late'])->default('Pending');
             $table->timestamps();
         });
     }

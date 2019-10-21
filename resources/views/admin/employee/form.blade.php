@@ -49,7 +49,6 @@
                         <div class="col-md-9">
                             <select class="form-control select2" name="department_id" id="department_id"
                                 style="width: 100%;">
-                                <option value=""> -- Select Department -- </option>
                                 @foreach ($departments as $department)
                                 <option value="{{$department->id}}">{{$department->name}}</option>
                                 @endforeach
@@ -59,12 +58,8 @@
                     <div class="form-group">
                         <label for="skill_id" class="col-md-2 control-label">Skills: </label>
                         <div class="col-md-9">
-                            <div class="text-center">-- Select Skills --</div>
-                            {{-- <label for="control-label">-- Select Skills --</label> --}}
-                            <select class="form-control select2" id="skill_id" name="skill_id[]" multiple
+                            <select class="form-control selectSkill" id="skill_id" name="skill_id[]" multiple="multiple"
                                 style="width: 100%;">
-                                {{-- <option value="" disabled> -- Select Department -- </option> --}}
-
                                 @foreach ($skills as $skill)
                                 <option value="{{$skill->id}}">{{$skill->name}}</option>
                                 @endforeach
@@ -136,8 +131,19 @@
                     </div>
                     <div class="form-group">
                         <label for="showSkills" class="control-label col-md-2">Skills: </label>
+                        <div class="col-md-9 selectStyle">
+                            <select class="form-control showStyle selectSkills" id="showSkills"
+                                name="showSkills[]" multiple="multiple" style="width: 100%;">
+                                @foreach ($skills as $skill)
+                                <option value="{{$skill->id}}">{{$skill->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="showStatus" class="col-md-2 control-label">Status: </label>
                         <div class="col-md-9">
-                            <div id="showSkills" name="skills" class="showStyle"></div>
+                            <div id="showStatus" name="status" class="showStyle"></div>
                         </div>
                     </div>
                     <div class="modal-footer">

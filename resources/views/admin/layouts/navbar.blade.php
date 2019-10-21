@@ -20,7 +20,7 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">HEADER</li>
+            <li class="header">Tables</li>
             <li><a href="/admin/tasks"><i class="fa fa-tasks" aria-hidden="true"></i>
                     <span> Tasks</span></a></li>
             <li><a href="/admin/employees"><i class="fa fa-users" aria-hidden="true"></i>

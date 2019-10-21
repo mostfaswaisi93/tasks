@@ -165,6 +165,7 @@
                     $('#showName').html(html.data.name);
                     $('#showDescription').html(html.data.description);
                     $('#hidden_id').val(html.data.id);
+                    $('.modal-title').text("Show Department");
                     $('#showModal').modal('show');
                 }
             });

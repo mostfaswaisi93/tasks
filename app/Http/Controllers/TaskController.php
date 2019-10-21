@@ -98,6 +98,15 @@ class TaskController extends Controller
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
+    public function show($id)
+    {
+        if (request()->ajax()) {
+            $data = Task::with(['employees', 'project'])->findOrFail($id);
+            $data->project->title;
+            return response()->json(['data' => $data]);
+        }
+    }
+
     public function edit($id)
     {
         if (request()->ajax()) {

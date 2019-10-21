@@ -22,7 +22,6 @@
                         <div class="col-md-9">
                             <select class="form-control select2" name="department_id" id="department_id"
                                 style="width: 100%;">
-                                <option value=""> -- Select Department -- </option>
                                 @foreach ($departments as $department)
                                 <option value="{{$department->id}}">{{$department->name}}</option>
                                 @endforeach

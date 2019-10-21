@@ -25,6 +25,7 @@
 
     <!-- Select2 -->
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/bower_components/select2/dist/css/select2.min.css">
+
     <!-- Bootstrap time Picker -->
     <link rel="stylesheet" href="{{url('/')}}/design/adminlte/plugins/timepicker/bootstrap-timepicker.min.css">
 
@@ -70,6 +71,10 @@
             border: 1px solid #d2d6de;
         }
 
+        .select2-container--default .select2-selection--multiple {
+            border: 1px solid #d2d6de;
+        }
+
         .box-header {
             padding-top: 40px;
             padding-left: 20px;
@@ -91,6 +96,32 @@
             word-break: break-word;
             padding: 5px;
             margin-bottom: 5px;
+        }
+
+        .select2-container--default.select2-container--disabled .select2-selection--multiple {
+            background-color: #fff;
+        }
+
+        .select2-container--default .select2-selection--multiple:focus {
+            border-color: #ffffff !important;
+
+        }
+
+        .selectStyle .select2-container--default .select2-selection--multiple {
+            border: 1px solid #ffffff;
+        }
+
+        .select2-container .select2-search--inline .select2-search__field {
+            margin-left: 7px;
+            width: auto !important;
+        }
+
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            padding-left: 0px;
+        }
+
+        #data-table {
+            width: 100% !important;
         }
     </style>
 

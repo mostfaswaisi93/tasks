@@ -60,7 +60,7 @@
                     var $select = $(`<select class='status form-control'
                     id='status' onchange=selectStatus(${row.id})>
                     <option value='Pending'>Pending</option>
-                    <option value='InProgress'>In Progress</option>
+                    <option value='In Progress'>In Progress</option>
                     <option value='Done'>Done</option>
                     <option value='Completed'>Completed</option>
                     <option value='Cancel'>Cancel</option>
@@ -190,6 +190,7 @@
                     $('#showDescription').html(html.data.description);
                     $('#showStatus').html(html.data.status);
                     $('#hidden_id').val(html.data.id);
+                    $('.modal-title').text("Show Project");
                     $('#showModal').modal('show');
                 }
             });
@@ -263,8 +264,10 @@
         project_id = id;
     }
 
-    $('.select2').select2();
-
+    $('.select2').select2({
+        placeholder: "Select Department",
+    });
+    
     CKEDITOR.replace('description', {
       height: 150,
     });

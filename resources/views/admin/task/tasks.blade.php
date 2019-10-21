@@ -27,12 +27,12 @@
                                 <select class="form-control" name="filterStatus" id="filterStatus"
                                     onchange="filtetrStatus(this);">
                                     <option value=''>Select Status </option>
-                                    <option value='pending'>Pending</option>
-                                    <option value='in_progress'>In Progress</option>
-                                    <option value='done'>Done</option>
-                                    <option value='completed'>Completed</option>
-                                    <option value='cancel'>Cancel</option>
-                                    <option value='late'>Late</option>
+                                    <option value='Pending'>Pending</option>
+                                    <option value='In Progress'>In Progress</option>
+                                    <option value='Done'>Done</option>
+                                    <option value='Completed'>Completed</option>
+                                    <option value='Cancel'>Cancel</option>
+                                    <option value='Late'>Late</option>
                                 </select>
                             </div>
                         </div>
@@ -129,12 +129,12 @@
                     render: function (data, type, row, meta){
                     var $select = $(`<select class='status form-control'
                     id='status' onchange=selectStatus(${row.id})>
-                    <option value='pending'>Pending</option>
-                    <option value='in_progress'>In Progress</option>
-                    <option value='done'>Done</option>
-                    <option value='completed'>Completed</option>
-                    <option value='cancel'>Cancel</option>
-                    <option value='late'>Late</option>
+                    <option value='Pending'>Pending</option>
+                    <option value='In Progress'>In Progress</option>
+                    <option value='Done'>Done</option>
+                    <option value='Completed'>Completed</option>
+                    <option value='Cancel'>Cancel</option>
+                    <option value='Late'>Late</option>
                     </select>`);
                     $select.find('option[value="'+row.status+'"]').attr('selected', 'selected');
                     return $select[0].outerHTML
@@ -156,6 +156,10 @@
             $('.modal-title').text("Add New Task");
                 $('#action_button').val("Add");
                 $('#taskForm').trigger("reset");
+                $('.select2').val('').trigger('change');
+                CKEDITOR.instances['description'].setData('');
+                CKEDITOR.instances['notes'].setData('');
+                $('.selectEmployee').val('').trigger('change');
                 $('#action').val("Add");
                 $('#taskModal').modal('show');
         });
@@ -164,10 +168,17 @@
             event.preventDefault();
             if($('#action').val() == 'Add')
             {
+                var formData = new FormData(this);
+                var descriptionValue = '';
+                descriptionValue = CKEDITOR.instances['description'].getData();
+                formData.append('description', descriptionValue);
+                var notesValue = '';
+                notesValue = CKEDITOR.instances['notes'].getData();
+                formData.append('notes', notesValue);
             $.ajax({
                 url:"{{ route('tasks.store') }}",
                 method:"POST",
-                data: new FormData(this),
+                data: formData,
                 contentType: false,
                 cache:false,
                 processData: false,
@@ -189,6 +200,7 @@
                     $('#taskForm')[0].reset();
                     $('#data-table').DataTable().ajax.reload();
                     $('#taskModal').modal('hide');
+                    toastr.success('Added Done!', 'Success!');
                 }
                     $('#form_result').html(html);
                 }
@@ -196,10 +208,17 @@
         }
         if($('#action').val() == "Edit")
         {
+            var formData = new FormData(this);
+            var descriptionValue = '';
+            descriptionValue = CKEDITOR.instances['description'].getData();
+            formData.append('description', descriptionValue);
+            var notesValue = '';
+            notesValue = CKEDITOR.instances['notes'].getData();
+            formData.append('notes', notesValue);
             $.ajax({
                 url:"{{ route('tasks.update') }}",
                 method:"POST",
-                data:new FormData(this),
+                data: formData,
                 contentType: false,
                 cache: false,
                 processData: false,
@@ -221,6 +240,7 @@
                 $('#taskForm')[0].reset();
                 $('#data-table').DataTable().ajax.reload();
                 $('#taskModal').modal('hide');
+                toastr.success('Edited Done!', 'Success!');
                 }
                 $('#form_result').html(html);
                 }
@@ -236,36 +256,32 @@
                 dataType:"json",
                 success:function(html){
                     function startConverter(){
-                    var a = new Date(html.data.start);
-                    var hour = a.getHours();
-                    var min = a.getMinutes();
-                    var time = hour + ':' + min;
-                    return time;
+                        var a = new Date(html.data.start);
+                        var hour = a.getHours();
+                        var min = a.getMinutes();
+                        var time = hour + ':' + min;
+                        return time;
                     }
-
                     function endConverter(){
-                    var a = new Date(html.data.end);
-                    var hour = a.getHours();
-                    var min = a.getMinutes();
-                    var time = hour + ':' + min;
-                    return time;
+                        var a = new Date(html.data.end);
+                        var hour = a.getHours();
+                        var min = a.getMinutes();
+                        var time = hour + ':' + min;
+                        return time;
                     }
-
-                    console.log(html);
                     var employees = html.data.employees;
                     var employee_ids = _.map(employees, 'id');
                     $('#title').val(html.data.title);
-                    $('#description').val(html.data.description);
-                    $('#project_id').val(html.data.project_id);
-                    $('#notes').val(html.data.notes);
+                    CKEDITOR.instances['description'].setData(html.data.description);
+                    $('#project_id').val(html.data.project_id).trigger('change');
+                    CKEDITOR.instances['notes'].setData(html.data.notes);
                     $('#start').val(startConverter(0));
                     $('#end').val(endConverter(0));
                     $('#employee_id > option').prop('selected', false);
                     $('#employee_id > option').each(function(){
                         var item = this;
                         if(employee_ids.indexOf(parseInt(item.value)) > -1){
-                            console.log('selected',true);
-                            $(this).prop('selected', true);
+                            $(this).prop('selected', true).trigger('change');
                         }else{
                             console.log('selected',false);
                         }
@@ -275,6 +291,37 @@
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
                     $('#taskModal').modal('show');
+                }
+            });
+        });
+
+        $(document).on('click', '.showBtn', function(){
+            task_id = $(this).attr('id');
+            $.ajax({
+                url:"/admin/tasks/"+task_id,
+                dataType:"json",
+                success:function(html){
+                    var employees = html.data.employees;
+                    var employee_ids = _.map(employees, 'id');
+                    $('#showTilte').html(html.data.title);
+                    $('#showDescription').html(html.data.description);
+                    $('#showEmployees > option').prop('selected', false);
+                    $('#showEmployees > option').each(function(){
+                        var item = this;
+                        if(employee_ids.indexOf(parseInt(item.value)) > -1){
+                            $(this).prop('selected', true).trigger('change');
+                        }else{
+                            console.log('selected',false);
+                        }
+                    });
+                    $('#showProject').html(html.data.project.title);
+                    $('#showStart').html(html.data.start);
+                    $('#showEnd').html(html.data.end);
+                    $('#showNotes').html(html.data.notes);
+                    $('#showStatus').html(html.data.status);
+                    $('#hidden_id').val(html.data.id);
+                    $('.modal-title').text("Show Task");
+                    $('#showModal').modal('show');
                 }
             });
         });
@@ -294,6 +341,7 @@
                         $('#confirmModal').modal('hide');
                         $('#data-table').DataTable().ajax.reload();
                         $('#ok_button').html('<i class="fa fa-check" aria-hidden="true"></i> Delete');
+                        toastr.success('Deleted Done!', 'Success!');
                     },
                     error: function (data) {
                         console.log('error:', data);
@@ -309,7 +357,6 @@
             }else{
                 toastr.success('Status changed!', 'Success!')
             }
-            console.log(task_id)
             $.ajax({
                 url:"tasks/updateStatus/"+task_id+"?status="+status_task,
                 headers: {
@@ -382,7 +429,6 @@
     });
 
     $('#start').on('dp.change', function(e){
-        // console.log(e.timeStamp);
         var new_time =  moment(e.timeStamp).add(20, 'm').format("HH:mm");
         $('body').find('#end').val(new_time);
     });
@@ -390,6 +436,24 @@
     $('#dateFilterSelect').datepicker({
         autoclose: true,
         format: 'yyyy-mm-dd'
+    });
+
+    $('.select2').select2({
+        placeholder: "Select Project"
+    });
+    $(".selectEmployee").select2({
+        placeholder: "Select Employees",
+        allowClear: true
+    });
+    $(".selectEmployees").select2();
+    $('.selectEmployees').prop("disabled", true);
+
+    CKEDITOR.replace('description', {
+      height: 150,
+    });
+
+    CKEDITOR.replace('notes', {
+      height: 150,
     });
 
 </script>
